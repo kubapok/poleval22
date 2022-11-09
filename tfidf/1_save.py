@@ -6,9 +6,7 @@ from stopwords import STOPWORDS
 
 DATA_PROCESSED = 'DATA_PROCESSED'
 
-
 DATA_DIR = '../../data/poleval-passage-retrieval'
-
 
 df_passages_wiki = pd.read_json(DATA_DIR + '/wiki-trivia/passages.jl', lines=True)
 df_passages_wiki['passage_id'] = df_passages_wiki['meta'].apply(lambda x : x['passage_id'])
@@ -25,17 +23,32 @@ df_queries_test_legal = pd.read_csv('../../data/2022-passage-retrieval/test-A-le
 df_queries_test_allegro = pd.read_csv('../../data/2022-passage-retrieval/test-A-allegro/in.tsv', sep =  '\t', names = ('source', 'text'))
 
 
-vectorizer_wiki = TfidfVectorizer(stop_words=STOPWORDS) 
+#vectorizer_wiki = TfidfVectorizer(stop_words=STOPWORDS) 
+vectorizer_wiki = TfidfVectorizer() 
 vectorizer_wiki.fit( list(df_passages_wiki['text']) + list(df_queries_train['text']) )
 
-vectorizer_all = TfidfVectorizer(stop_words=STOPWORDS) 
-corpora_all=  (list(df_passages_wiki['text']) + list(df_queries_train['text'])  
+vectorizer_legal = TfidfVectorizer() 
+vectorizer_legal.fit( list(df_passages_legal['text']) + list(df_queries_train['text']) )
+
+
+vectorizer_allegro = TfidfVectorizer() 
+vectorizer_allegro.fit(list(df_passages_allegro['text']) + list(df_queries_train['text']) )
+
+#vectorizer_all = TfidfVectorizer(stop_words=STOPWORDS) 
+vectorizer_all = TfidfVectorizer() 
+corpora_all=  (   list(df_passages_wiki['text'])
+                + list(df_passages_legal['text'])
+                + list(df_passages_allegro['text'])
+
+                + list(df_queries_train['text'])  
                 + list(df_queries_dev['text'])  
                 + list(df_queries_test_wiki['text'])  
                 + list(df_queries_test_allegro['text'])  
                 + list(df_queries_test_legal['text']) )
 
 vectorizer_all.fit(corpora_all)
+
+
 
 
 passages_text_transformed_wiki = vectorizer_wiki.transform(df_passages_wiki['text'])

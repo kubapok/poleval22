@@ -1,6 +1,25 @@
 1
-dev
-8.28
+dev  8.28
+test 40.17
 
-test
-40.17
+
+2 - bez stopwords
+dev  8.32
+test 0.4048
+
+
+
+bez IDF 
+train 3.48
+dev 3.48
+
+
+
+3 - lepsze corpora
+train 8.68
+dev 8.32
+test 40.71
+
+
+
+

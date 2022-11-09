@@ -63,8 +63,8 @@ def run(queries_text_transformed, df_passages, passages_text_transformed, f_out_
         f_out.write('\t'.join(o) + '\n')
     f_out.close()
 
-run(queries_text_transformed_train, df_passages_wiki, passages_text_transformed_wiki,  '../../data/2022-passage-retrieval/train/out.tsv')
-run(queries_text_transformed_dev, df_passages_wiki, passages_text_transformed_wiki, '../../data/2022-passage-retrieval/dev-0/out.tsv')
-run(queries_text_transformed_test_wiki, df_passages_wiki, passages_text_transformed_wiki,  '../../data/2022-passage-retrieval/test-A-wiki/out.tsv')
-run(queries_text_transformed_test_legal, df_passages_legal, passages_text_transformed_legal,  '../../data/2022-passage-retrieval/test-A-legal/out.tsv')
-run(queries_text_transformed_test_allegro, df_passages_allegro, passages_text_transformed_allegro,  '../../data/2022-passage-retrieval/test-A-allegro/out.tsv')
+run(queries_text_transformed_train, df_passages_wiki, passages_text_transformed_wiki,  '../../data/2022-passage-retrieval-tfidf/train/out.tsv')
+run(queries_text_transformed_dev, df_passages_wiki, passages_text_transformed_wiki, '../../data/2022-passage-retrieval-tfidf/dev-0/out.tsv')
+run(queries_text_transformed_test_wiki, df_passages_wiki, passages_text_transformed_wiki,  '../../data/2022-passage-retrieval-tfidf/test-A-wiki/out.tsv')
+run(queries_text_transformed_test_legal, df_passages_legal, passages_text_transformed_legal,  '../../data/2022-passage-retrieval-tfidf/test-A-legal/out.tsv')
+run(queries_text_transformed_test_allegro, df_passages_allegro, passages_text_transformed_allegro,  '../../data/2022-passage-retrieval-tfidf/test-A-allegro/out.tsv')
