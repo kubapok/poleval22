@@ -51,10 +51,10 @@ def run(df_passages, ranker, in_file, out_file, top_n):
             f_out.write('\t'.join(o) + '\n')
             
 if sys.argv[1] == '1':
-    run(df_passages_wiki, bm25_wiki,'../../data/2022-passage-retrieval-bm25/dev-0/in.tsv' , '../../data/2022-passage-retrieval-bm25/dev-0/out.tsv', NR_OF_INDICES)
+    run(df_passages_wiki, bm25_wiki,'../../data/2022-passage-retrieval-bm25/dev-0/in.tsv' , '../../data/2022-passage-retrieval-fastbm25/dev-0/out.tsv', NR_OF_INDICES)
 elif sys.argv[1] == '2':
-    run(df_passages_wiki, bm25_wiki,'../../data/2022-passage-retrieval-bm25/test-A-wiki/in.tsv' , '../../data/2022-passage-retrieval-bm25/test-A-wiki/out.tsv', NR_OF_INDICES)
+    run(df_passages_wiki, bm25_wiki,'../../data/2022-passage-retrieval-bm25/test-A-wiki/in.tsv' , '../../data/2022-passage-retrieval-fastbm25/test-A-wiki/out.tsv', NR_OF_INDICES)
 elif sys.argv[1] == '3':
-    run(df_passages_legal, bm25_legal,'../../data/2022-passage-retrieval-bm25/test-A-legal/in.tsv' , '../../data/2022-passage-retrieval-bm25/test-A-legal/out.tsv', NR_OF_INDICES)
+    run(df_passages_legal, bm25_legal,'../../data/2022-passage-retrieval-bm25/test-A-legal/in.tsv' , '../../data/2022-passage-retrieval-fastbm25/test-A-legal/out.tsv', NR_OF_INDICES)
 elif sys.argv[1] == '4':
-    run(df_passages_allegro, bm25_allegro,'../../data/2022-passage-retrieval-bm25/test-A-allegro/in.tsv' , '../../data/2022-passage-retrieval-bm25/test-A-allegro/out.tsv', NR_OF_INDICES)
+    run(df_passages_allegro, bm25_allegro,'../../data/2022-passage-retrieval-bm25/test-A-allegro/in.tsv' , '../../data/2022-passage-retrieval-fastbm25/test-A-allegro/out.tsv', NR_OF_INDICES)

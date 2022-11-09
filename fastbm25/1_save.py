@@ -1,0 +1,80 @@
+import pandas as pd
+import pickle
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+#from stopwords import STOPWORDS
+from rank_bm25 import BM25Okapi
+from tokenizer_function import tokenize
+from nltk.tokenize import word_tokenize
+
+
+DATA_PROCESSED = 'DATA_PROCESSED'
+
+DATA_DIR = '../../data/poleval-passage-retrieval-sample'
+
+df_passages_wiki = pd.read_json(DATA_DIR + '/wiki-trivia/passages.jl', lines=True)
+df_passages_wiki['passage_id'] = df_passages_wiki['meta'].apply(lambda x : x['passage_id'])
+df_passages_wiki['article_id'] = df_passages_wiki['meta'].apply(lambda x : x['article_id'])
+df_passages_wiki['set'] = df_passages_wiki['article_id'].astype(str) + '-' + df_passages_wiki['passage_id'].astype(str)
+
+df_passages_legal = pd.read_json(DATA_DIR + '/legal-questions/passages.jl', lines=True)
+df_passages_allegro = pd.read_json(DATA_DIR + '/allegro-faq/passages.jl', lines=True)
+
+df_queries_train = pd.read_csv('../../data/2022-passage-retrieval/train/in.tsv', sep =  '\t', names = ('source', 'text'))
+df_queries_dev = pd.read_csv('../../data/2022-passage-retrieval/dev-0/in.tsv', sep =  '\t', names = ('source', 'text'))
+df_queries_test_wiki = pd.read_csv('../../data/2022-passage-retrieval/test-A-wiki/in.tsv', sep =  '\t', names = ('source', 'text'))
+df_queries_test_legal = pd.read_csv('../../data/2022-passage-retrieval/test-A-legal/in.tsv', sep =  '\t', names = ('source', 'text'))
+df_queries_test_allegro = pd.read_csv('../../data/2022-passage-retrieval/test-A-allegro/in.tsv', sep =  '\t', names = ('source', 'text'))
+print('reading done')
+
+
+corpora_wiki = list(df_passages_wiki['text'])
+corpora_wiki = [word_tokenize(doc.lower()) for doc in corpora_wiki]
+
+corpora_legal = list(df_passages_legal['text'])
+corpora_legal = [word_tokenize(doc.lower()) for doc in corpora_legal]
+
+corpora_allegro = list(df_passages_allegro['text'])
+corpora_allegro = [word_tokenize(doc.lower()) for doc in corpora_allegro]
+
+#corpora_wiki = tokenize(corpora_wiki)
+
+# corpora_all=  (list(df_passages_wiki['text']) + list(df_queries_train['text'])  
+#                 + list(df_queries_dev['text'])  
+#                 + list(df_queries_test_wiki['text'])  
+#                 + list(df_queries_test_allegro['text'])  
+#                 + list(df_queries_test_legal['text']) )
+# corpora_all = [doc.split(" ") for doc in corpora_all]
+# corpora_all = tokenize(corpora_all)
+print('corpora processing done')
+
+
+bm25_wiki = BM25Okapi(corpora_wiki)
+bm25_legal = BM25Okapi(corpora_legal)
+bm25_allegro = BM25Okapi(corpora_allegro)
+print('bm25 learnt')
+
+
+with open(f'{DATA_PROCESSED}/bm25_wiki.pkl','wb') as f_out:
+    pickle.dump(bm25_wiki,f_out)
+
+with open(f'{DATA_PROCESSED}/bm25_legal.pkl','wb') as f_out:
+    pickle.dump(bm25_legal,f_out)
+
+with open(f'{DATA_PROCESSED}/bm25_allegro.pkl','wb') as f_out:
+    pickle.dump(bm25_allegro,f_out)
+
+# with open(f'{DATA_PROCESSED}/corpora_all.pkl','wb') as f_out:
+#     pickle.dump(corpora_all,f_out)
+
+with open(f'{DATA_PROCESSED}/corpora_wiki.pkl','wb') as f_out:
+    pickle.dump(corpora_wiki,f_out)
+
+with open(f'{DATA_PROCESSED}/df_passages_wiki.pkl','wb') as f_out:
+    pickle.dump(df_passages_wiki,f_out)
+
+with open(f'{DATA_PROCESSED}/df_passages_legal.pkl','wb') as f_out:
+    pickle.dump(df_passages_legal,f_out)
+
+with open(f'{DATA_PROCESSED}/df_passages_allegro.pkl','wb') as f_out:
+    pickle.dump(df_passages_allegro,f_out)
