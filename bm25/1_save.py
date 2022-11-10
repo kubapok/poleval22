@@ -5,7 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 #from stopwords import STOPWORDS
 from rank_bm25 import BM25Okapi
 from tokenizer_function import tokenize
-from nltk.tokenize import word_tokenize
+from stempel import StempelStemmer
 
 
 DATA_PROCESSED = 'DATA_PROCESSED'
@@ -29,23 +29,14 @@ print('reading done')
 
 
 corpora_wiki = list(df_passages_wiki['text'])
-corpora_wiki = [word_tokenize(doc.lower()) for doc in corpora_wiki]
+corpora_wiki = [tokenize(doc) for doc in corpora_wiki]
 
 corpora_legal = list(df_passages_legal['text'])
-corpora_legal = [word_tokenize(doc.lower()) for doc in corpora_legal]
+corpora_legal = [tokenize(doc) for doc in corpora_legal]
 
 corpora_allegro = list(df_passages_allegro['text'])
-corpora_allegro = [word_tokenize(doc.lower()) for doc in corpora_allegro]
+corpora_allegro = [tokenize(doc) for doc in corpora_allegro]
 
-#corpora_wiki = tokenize(corpora_wiki)
-
-# corpora_all=  (list(df_passages_wiki['text']) + list(df_queries_train['text'])  
-#                 + list(df_queries_dev['text'])  
-#                 + list(df_queries_test_wiki['text'])  
-#                 + list(df_queries_test_allegro['text'])  
-#                 + list(df_queries_test_legal['text']) )
-# corpora_all = [doc.split(" ") for doc in corpora_all]
-# corpora_all = tokenize(corpora_all)
 print('corpora processing done')
 
 

@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from nltk.tokenize import word_tokenize
+from tokenizer_function import tokenize
 
 DATA_DIR = 'DATA_PROCESSED'
 
@@ -40,7 +40,9 @@ def run(df_passages, ranker, in_file, out_file, top_n):
         top10_indices = []
         for line in tqdm(f_in):
             dataset, query = line.rstrip().split('\t')
-            query = word_tokenize(query.lower())
+            #query = word_tokenize(query.lower())
+            #query = [stemmer.stem(x).lower() for x in word_tokenize(query) if stemmer.stem(x)]
+            query = tokenize(query)
             scores = ranker.get_scores(query)
             top10_indices_batch = np.argsort(-scores)[:NR_OF_INDICES].tolist()
             top10_indices.append(top10_indices_batch)
