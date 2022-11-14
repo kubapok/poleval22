@@ -1,3 +1,18 @@
 8
 dev 19.94
-test 0.52
+test 52
+
+
+10 
+PARAMS='stemmer=polimorf,word=1,word_lower=1,stemmed=1,stemmed_lower=1,STOPWORDS=1,PARAM_K1=1.2,PARAM_B=0.75,EPSILON=0.25'
+dev  22.17
+test-A 52.67
+
+
+
+
+11
+PARAMS='stemmer=polimorf,word=1,word_lower=1,stemmed=1,stemmed_lower=1,STOPWORDS=1,PARAM_K1=0.2,PARAM_B=0.9,EPSILON=0.25'
+dev 23.76
+test-A 0.5134
+

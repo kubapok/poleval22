@@ -3,7 +3,8 @@ import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 #from stopwords import STOPWORDS
-from rank_bm25 import BM25Okapi
+#from rank_bm25 import BM25Okapi
+from rank_bm25 import BM25Plus
 from tokenizer_function import tokenize
 from stempel import StempelStemmer
 
@@ -40,9 +41,9 @@ corpora_allegro = [tokenize(doc) for doc in corpora_allegro]
 print('corpora processing done')
 
 
-bm25_wiki = BM25Okapi(corpora_wiki)
-bm25_legal = BM25Okapi(corpora_legal)
-bm25_allegro = BM25Okapi(corpora_allegro)
+bm25_wiki = BM25Plus(corpora_wiki)
+bm25_legal = BM25Plus(corpora_legal)
+bm25_allegro = BM25Plus(corpora_allegro)
 print('bm25 learnt')
 
 

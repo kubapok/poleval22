@@ -10,3 +10,15 @@ test-A 39.4
 7 fix poprzedniego
 dev 16.13
 test-A 48.5
+
+9 # tutaj chyba był użyty stemmer?
+dev 20.0
+test 52.193
+
+9 BM25L
+dev  0.2
+test 
+
+9 BM25Plus
+dev 
+test 

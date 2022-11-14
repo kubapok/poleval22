@@ -3,9 +3,14 @@ import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 #from stopwords import STOPWORDS
-from fastbm25 import fastbm25
-from tokenizer_function import tokenize
+from my_fastbm25 import fastbm25
+from tokenizer_function import Tokenizer
 from stempel import StempelStemmer
+from argument_parser import get_params_dict
+import sys
+
+
+PARAMS = get_params_dict(sys.argv[1])
 
 
 DATA_PROCESSED = 'DATA_PROCESSED'
@@ -27,22 +32,23 @@ df_queries_test_legal = pd.read_csv('../../data/2022-passage-retrieval/test-A-le
 df_queries_test_allegro = pd.read_csv('../../data/2022-passage-retrieval/test-A-allegro/in.tsv', sep =  '\t', names = ('source', 'text'))
 print('reading done')
 
+tokenizer = Tokenizer(PARAMS)
 
 corpora_wiki = list(df_passages_wiki['text'])
-corpora_wiki = [tokenize(doc) for doc in corpora_wiki]
+corpora_wiki = [tokenizer.tokenize(doc) for doc in corpora_wiki]
 
 corpora_legal = list(df_passages_legal['text'])
-corpora_legal = [tokenize(doc) for doc in corpora_legal]
+corpora_legal = [tokenizer.tokenize(doc) for doc in corpora_legal]
 
 corpora_allegro = list(df_passages_allegro['text'])
-corpora_allegro = [tokenize(doc) for doc in corpora_allegro]
+corpora_allegro = [tokenizer.tokenize(doc) for doc in corpora_allegro]
 
 print('corpora processing done')
 
 
-bm25_wiki = fastbm25(corpora_wiki)
-bm25_legal = fastbm25(corpora_legal)
-bm25_allegro = fastbm25(corpora_allegro)
+bm25_wiki = fastbm25(corpora_wiki,PARAMS['PARAM_K1'],PARAMS['PARAM_B'],PARAMS['EPSILON'])
+bm25_legal = fastbm25(corpora_legal,PARAMS['PARAM_K1'],PARAMS['PARAM_B'],PARAMS['EPSILON'])
+bm25_allegro = fastbm25(corpora_allegro,PARAMS['PARAM_K1'],PARAMS['PARAM_B'],PARAMS['EPSILON'])
 print('bm25 learnt')
 
 
