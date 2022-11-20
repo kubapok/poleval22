@@ -14,5 +14,11 @@ dev  28.81
 test-A 57.2
 
 
+15 zwiekszanie rerank do 50
+dev  29.76
+test-A 57.45
+
+
+16 zwiekszanie rerank do 50
 
 
