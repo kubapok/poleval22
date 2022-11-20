@@ -7,6 +7,14 @@ from tqdm import tqdm
 from tokenizer_function import Tokenizer
 from argument_parser import get_params_dict
 import sys
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
+
+model_name='cross-encoder/ms-marco-MiniLM-L-6-v2'
+model = AutoModelForSequenceClassification.from_pretrained(model_name)
+tokenizer_transformer = AutoTokenizer.from_pretrained(model_name)
+model.eval()
+
 
 DATA_DIR = 'DATA_PROCESSED'
 PARAMS = get_params_dict(sys.argv[2])
@@ -21,11 +29,28 @@ def run(df_passages, ranker, in_file, out_file, top_n):
         top10_indices = []
         for line in tqdm(f_in):
             dataset, query_pl, query_en = line.rstrip().split('\t')
-            query_pl = tokenizer.tokenize(query_pl)
-            scores = ranker.top_k_sentence(query_pl,NR_OF_INDICES)
+            query_pl_tokenized = tokenizer.tokenize(query_pl)
+            scores = ranker.top_k_sentence(query_pl_tokenized,NR_OF_INDICES)
             top10_indices_batch = df_passages.iloc[[a[1] for a in scores], ]['id'].tolist()
-            top10_indices.append(top10_indices_batch)
+
+
+            #reranking
+            text_en = df_passages.iloc[[a[1] for a in scores], ]['text_en'].tolist()
+            query_en = [query_en]*len(text_en)
+            try:
+                features_transformer = tokenizer_transformer(query_en, text_en, padding=True, truncation=True, return_tensors='pt')
+                scores_transformer = model(**features_transformer).logits
+                scores_transformer = (-scores_transformer).squeeze().tolist()
+                new_order = [top10_indices_batch[a] for a in np.argsort(scores_transformer)   ]
+            except:
+                import pdb; pdb.set_trace()
             #import pdb; pdb.set_trace()
+
+
+            # final score
+            #top10_indices.append(top10_indices_batch)
+            top10_indices.append(new_order)
+
 
         for o in tqdm(top10_indices):
             o = [str(a) for a in o]

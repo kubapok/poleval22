@@ -1,6 +1,5 @@
-PARAMS='stemmer=polimorf,word=1,word_lower=1,stemmed=1,stemmed_lower=1,STOPWORDS=1,PARAM_K1=0.2,PARAM_B=0.9,EPSILON=0.25'
+PARAMS='stemmer=polimorf,word=1,word_lower=1,stemmed=1,stemmed_lower=1,STOPWORDS=1,PARAM_K1=1.2,PARAM_B=0.75,EPSILON=0.25'
 #PARAMS=$1
-
 
 bash 0.sh
 python 1_save.py  $PARAMS
