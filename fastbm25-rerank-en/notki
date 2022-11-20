@@ -3,6 +3,16 @@ obecnie testowane:
 
 
 
-12
+12- rerank na 10
 dev 25.18
 test-A 54.61
+
+
+
+13 - zwiększenie z 10 do 30 
+dev  28.81
+test-A 57.2
+
+
+
+
