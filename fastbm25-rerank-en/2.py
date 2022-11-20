@@ -21,7 +21,7 @@ PARAMS = get_params_dict(sys.argv[2])
 
 
 tokenizer = Tokenizer(PARAMS)
-NR_OF_INDICES=50
+NR_OF_INDICES=70
 
 
 def run(df_passages, ranker, in_file, out_file, top_n):
