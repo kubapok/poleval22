@@ -23,4 +23,6 @@ test-A 57.45
 dev 30.63
 test-A 57.65
 
-
+17 rerank 100K
+dev 31.48
+test  57.71
