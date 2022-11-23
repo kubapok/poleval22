@@ -39,6 +39,12 @@ test-A 58.29
 
 
 
+20
+zmiana modelu na multilingual i użycie języka polskiego
+model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+dev 36.25
+test-A 66.31
+
 
 
 
