@@ -23,6 +23,22 @@ test-A 57.45
 dev 30.63
 test-A 57.65
 
-17 rerank 100K
+17 rerank 100
+model_name='cross-encoder/ms-marco-MiniLM-L-6-v2'
 dev 31.48
 test  57.71
+
+
+19 
+zmiana z 
+model_name='cross-encoder/ms-marco-MiniLM-L-6-v2'
+na
+model_name='cross-encoder/ms-marco-MiniLM-L-12-v2'
+dev 31.61
+test-A 58.29
+
+
+
+
+
+

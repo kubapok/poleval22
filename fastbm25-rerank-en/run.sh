@@ -3,10 +3,10 @@ PARAMS='stemmer=polimorf,word=1,word_lower=1,stemmed=1,stemmed_lower=1,STOPWORDS
 
 #bash 0.sh
 #python 1_save.py  $PARAMS
-python 2.py 1 $PARAMS & 
-python 2.py 2 $PARAMS & 
-python 2.py 3 $PARAMS & 
-python 2.py 4 $PARAMS & 
+python 2.py 1 $PARAMS  
+python 2.py 2 $PARAMS  
+python 2.py 3 $PARAMS  
+python 2.py 4 $PARAMS  
 
 wait
 bash 3.sh

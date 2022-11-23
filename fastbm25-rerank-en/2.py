@@ -10,7 +10,7 @@ import sys
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 
-model_name='cross-encoder/ms-marco-MiniLM-L-6-v2'
+model_name='cross-encoder/ms-marco-MiniLM-L-12-v2'
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 tokenizer_transformer = AutoTokenizer.from_pretrained(model_name)
 model.eval()
