@@ -10,9 +10,11 @@ import sys
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 
+DEVICE='cuda'
 model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 tokenizer_transformer = AutoTokenizer.from_pretrained(model_name)
+model.to(DEVICE)
 model.eval()
 
 
@@ -43,7 +45,7 @@ def run(df_passages, ranker, in_file, out_file, top_n):
 
             try:
                 #features_transformer = tokenizer_transformer(query_en, text_en, padding=True, truncation=True, return_tensors='pt')
-                features_transformer = tokenizer_transformer(query_pl, text_pl, padding=True, truncation=True, return_tensors='pt') # do wywalenia
+                features_transformer = tokenizer_transformer(query_pl, text_pl, padding=True, truncation=True, return_tensors='pt').to(DEVICE) # do wywalenia
 
                 scores_transformer = model(**features_transformer).logits
                 scores_transformer = (-scores_transformer).squeeze().tolist()
