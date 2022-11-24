@@ -24,7 +24,7 @@ PARAMS = get_params_dict(sys.argv[2])
 
 
 tokenizer = Tokenizer(PARAMS)
-NR_OF_INDICES=200
+NR_OF_INDICES=300
 
 
 def run(df_passages, ranker, in_file, out_file, top_n):
@@ -52,6 +52,7 @@ def run(df_passages, ranker, in_file, out_file, top_n):
                 features_transformer = tokenizer_transformer(query_pl[i:i+bs], text_pl[i:i+bs], padding=True, truncation='only_second',max_length=512, return_tensors='pt').to(DEVICE) # do wywalenia
                 scores_transformer_batch = model(**features_transformer).logits
                 scores_transformer_batch = (-scores_transformer_batch).squeeze().tolist()
+                #scores_transformer_batch = [a[1] for a in scores_transformer_batch] # to tylko jak jest podwójny output w niektórych modelach!!!!
                 scores_transformer += scores_transformer_batch[:]
 
             new_order = [top10_indices_batch[a] for a in np.argsort(scores_transformer)   ]

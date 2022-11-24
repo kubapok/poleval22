@@ -56,3 +56,17 @@ jak poprzednio tylko reranking z 200, a nie 100
 dev 40.05
 test-A 69.01
 
+
+
+dev 33.52
+100, ale 
+model_name = 'amberoad/bert-multilingual-passage-reranking-msmarco'
+
+
+
+
+23
+cross-encoder/mmarco-mdeberta-v3-base-5negs-v1 
+rerank z 300
+dev 41.25
+test-A 69.09
