@@ -51,3 +51,8 @@ dev 38.40
 test-A 68.39
 
 
+22
+jak poprzednio tylko reranking z 200, a nie 100
+dev 40.05
+test-A 69.01
+
