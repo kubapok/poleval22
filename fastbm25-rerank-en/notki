@@ -45,6 +45,9 @@ model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
 dev 36.25
 test-A 66.31
 
-
+21
+cross-encoder/mmarco-mdeberta-v3-base-5negs-v1
+dev 38.40
+test-A 68.39
 
 

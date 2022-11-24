@@ -9,11 +9,12 @@ from argument_parser import get_params_dict
 import sys
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
+import re
 
 DEVICE='cuda'
-model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model_name='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
-tokenizer_transformer = AutoTokenizer.from_pretrained(model_name)
+tokenizer_transformer = AutoTokenizer.from_pretrained(model_name,use_fast=False)
 model.to(DEVICE)
 model.eval()
 
@@ -43,20 +44,22 @@ def run(df_passages, ranker, in_file, out_file, top_n):
             text_pl = df_passages.iloc[[a[1] for a in scores], ]['text'].tolist() # do wywalenia
             query_pl = [query_pl]*len(text_pl) # do wywalenia
 
-            try:
-                #features_transformer = tokenizer_transformer(query_en, text_en, padding=True, truncation=True, return_tensors='pt')
-                features_transformer = tokenizer_transformer(query_pl, text_pl, padding=True, truncation=True, return_tensors='pt').to(DEVICE) # do wywalenia
+            #text_pl = [' '.join(a.replace('\n','').split(' ')[:1000000]) for a in text_pl]
+            #text_pl = [re.sub('\[\d*\]|\|*|"|:|;|\[|\]|-', '', a) for a in text_pl]
+            #query_pl = [' '.join(a.replace('\n','').split(' ')[:1000000]) for a in query_pl]
+            #query_pl = [re.sub('\[\d*\]|\|*|"|:|;|\[|\]|-', '', a) for a in query_pl]
 
-                scores_transformer = model(**features_transformer).logits
-                scores_transformer = (-scores_transformer).squeeze().tolist()
-                new_order = [top10_indices_batch[a] for a in np.argsort(scores_transformer)   ]
-            except:
-                import pdb; pdb.set_trace()
-            #import pdb; pdb.set_trace()
+            scores_transformer = list()
 
+            #features_transformer = tokenizer_transformer(query_en, text_en, padding=True, truncation=True, return_tensors='pt')
+            features_transformer = tokenizer_transformer(query_pl, text_pl, padding=True, truncation='only_second',max_length=512, return_tensors='pt').to(DEVICE) # do wywalenia
+
+            scores_transformer = model(**features_transformer).logits
+            scores_transformer = (-scores_transformer).squeeze().tolist()
+
+            new_order = [top10_indices_batch[a] for a in np.argsort(scores_transformer)   ]
 
             # final score
-            #top10_indices.append(top10_indices_batch)
             top10_indices.append(new_order)
 
 
