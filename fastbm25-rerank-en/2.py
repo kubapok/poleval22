@@ -14,33 +14,42 @@ import re
 DEVICE='cuda'
 
 
-#model_name='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
-model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
-model = AutoModelForSequenceClassification.from_pretrained(model_name)
-tokenizer_transformer = AutoTokenizer.from_pretrained(model_name,use_fast=False)
-model.to(DEVICE)
-model.eval()
+model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model1 = AutoModelForSequenceClassification.from_pretrained(model_name1)
+tokenizer_transformers1 = AutoTokenizer.from_pretrained(model_name1,use_fast=False)
+model1.to(DEVICE)
+model1.eval()
+
+model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+model2 = AutoModelForSequenceClassification.from_pretrained(model_name2)
+tokenizer_transformers2 = AutoTokenizer.from_pretrained(model_name2,use_fast=False)
+model2.to(DEVICE)
+model2.eval()
+
+
 
 
 DATA_DIR = 'DATA_PROCESSED'
 PARAMS = get_params_dict(sys.argv[2])
 
 
-tokenizer = Tokenizer(PARAMS)
+tokenizer_okapi = Tokenizer(PARAMS)
 NR_OF_INDICES=500
 
 
-
-def get_reranked_scores(model, tokeznier, query_pl, text_pl):
-    bs=100
+def get_reranked_scores(model, tokenizer_transformer, query_pl, text_pl):
+    bs=30
     scores_transformer = list()
     for i in range(0,len(text_pl), bs):
         #features_transformer = tokenizer_transformer(query_en, text_en, padding=True, truncation=True, return_tensors='pt')
         features_transformer = tokenizer_transformer(query_pl[i:i+bs], text_pl[i:i+bs], padding=True, truncation='only_second',max_length=512, return_tensors='pt').to(DEVICE) # do wywalenia
         scores_transformer_batch = model(**features_transformer).logits
-        scores_transformer_batch = (-scores_transformer_batch).squeeze().tolist()
+        scores_transformer_batch = (-scores_transformer_batch).squeeze(1).tolist()
         #scores_transformer_batch = [a[1] for a in scores_transformer_batch] # to tylko jak jest podwójny output w niektórych modelach!!!!
-        scores_transformer += scores_transformer_batch[:]
+        try:
+            scores_transformer += scores_transformer_batch[:]
+        except:
+            import pdb; pdb.set_trace()
     return scores_transformer
 
 
@@ -50,10 +59,9 @@ def run(df_passages, ranker, in_file, out_file, top_n):
         top10_indices = []
         for line in tqdm(f_in):
             dataset, query_pl, query_en = line.rstrip().split('\t')
-            query_pl_tokenized = tokenizer.tokenize(query_pl)
+            query_pl_tokenized = tokenizer_okapi.tokenize(query_pl)
             scores = ranker.top_k_sentence(query_pl_tokenized,NR_OF_INDICES)
             top10_indices_batch = df_passages.iloc[[a[1] for a in scores], ]['id'].tolist()
-
 
             #reranking
             #text_en = df_passages.iloc[[a[1] for a in scores], ]['text_en'].tolist()
@@ -63,7 +71,10 @@ def run(df_passages, ranker, in_file, out_file, top_n):
             query_pl = [query_pl]*len(text_pl) # do wywalenia
 
 
-            scores_transformer = get_reranked_scores(model, tokenizer, query_pl, text_pl)
+            scores_transformer1 = get_reranked_scores(model1, tokenizer_transformers1, query_pl, text_pl)
+            scores_transformer2 = get_reranked_scores(model2, tokenizer_transformers2, query_pl, text_pl)
+            scores_transformer = [(s1+s2)/2 for s1,s2 in zip(scores_transformer1, scores_transformer2)]
+
 
             new_order = [top10_indices_batch[a] for a in np.argsort(scores_transformer)   ]
 

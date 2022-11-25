@@ -85,5 +85,14 @@ rarank 500 oraz truncation='only_second'
 dev 38.65
 
 
+25
+ensemble z 
+model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+dla legal i allegro trzeba zredukować BS do 50
+ale nie ma żadnego ważenia, a min/max są chyba rózne, można użyć minmaxscaler
+z 500
+dev 43.0 
+test-A 69.62
 
 
