@@ -12,7 +12,10 @@ import torch
 import re
 
 DEVICE='cuda'
-model_name='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+
+
+#model_name='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 tokenizer_transformer = AutoTokenizer.from_pretrained(model_name,use_fast=False)
 model.to(DEVICE)
@@ -25,6 +28,21 @@ PARAMS = get_params_dict(sys.argv[2])
 
 tokenizer = Tokenizer(PARAMS)
 NR_OF_INDICES=500
+
+
+
+def get_reranked_scores(model, tokeznier, query_pl, text_pl):
+    bs=100
+    scores_transformer = list()
+    for i in range(0,len(text_pl), bs):
+        #features_transformer = tokenizer_transformer(query_en, text_en, padding=True, truncation=True, return_tensors='pt')
+        features_transformer = tokenizer_transformer(query_pl[i:i+bs], text_pl[i:i+bs], padding=True, truncation='only_second',max_length=512, return_tensors='pt').to(DEVICE) # do wywalenia
+        scores_transformer_batch = model(**features_transformer).logits
+        scores_transformer_batch = (-scores_transformer_batch).squeeze().tolist()
+        #scores_transformer_batch = [a[1] for a in scores_transformer_batch] # to tylko jak jest podwójny output w niektórych modelach!!!!
+        scores_transformer += scores_transformer_batch[:]
+    return scores_transformer
+
 
 
 def run(df_passages, ranker, in_file, out_file, top_n):
@@ -44,16 +62,8 @@ def run(df_passages, ranker, in_file, out_file, top_n):
             text_pl = df_passages.iloc[[a[1] for a in scores], ]['text'].tolist() # do wywalenia
             query_pl = [query_pl]*len(text_pl) # do wywalenia
 
-            scores_transformer = list()
 
-            bs=100
-            for i in range(0,len(text_pl), bs):
-                #features_transformer = tokenizer_transformer(query_en, text_en, padding=True, truncation=True, return_tensors='pt')
-                features_transformer = tokenizer_transformer(query_pl[i:i+bs], text_pl[i:i+bs], padding=True, truncation='only_second',max_length=512, return_tensors='pt').to(DEVICE) # do wywalenia
-                scores_transformer_batch = model(**features_transformer).logits
-                scores_transformer_batch = (-scores_transformer_batch).squeeze().tolist()
-                #scores_transformer_batch = [a[1] for a in scores_transformer_batch] # to tylko jak jest podwójny output w niektórych modelach!!!!
-                scores_transformer += scores_transformer_batch[:]
+            scores_transformer = get_reranked_scores(model, tokenizer, query_pl, text_pl)
 
             new_order = [top10_indices_batch[a] for a in np.argsort(scores_transformer)   ]
 
