@@ -61,7 +61,7 @@ test-A 69.01
 dev 33.52
 100, ale 
 model_name = 'amberoad/bert-multilingual-passage-reranking-msmarco'
-
+nie wrzucałem na strone
 
 
 
@@ -70,3 +70,13 @@ cross-encoder/mmarco-mdeberta-v3-base-5negs-v1
 rerank z 300
 dev 41.25
 test-A 69.09
+
+
+24 
+rerank z 500
+dev 42.70
+test-A 69.31
+
+
+
+
