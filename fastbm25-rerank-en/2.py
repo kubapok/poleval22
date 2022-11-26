@@ -28,7 +28,6 @@ model2.eval()
 
 
 
-
 DATA_DIR = 'DATA_PROCESSED'
 PARAMS = get_params_dict(sys.argv[2])
 
@@ -55,6 +54,11 @@ def get_reranked_scores(model, tokenizer_transformer, query_pl, text_pl):
 
 
 def run(df_passages, ranker, in_file, out_file, top_n):
+    min_model1=100
+    max_model1=-100
+
+    min_model2=100
+    max_model2=-100
     with open(out_file, 'w') as f_out, open(in_file) as f_in:
         top10_indices = []
         for line in tqdm(f_in):
@@ -73,8 +77,21 @@ def run(df_passages, ranker, in_file, out_file, top_n):
 
             scores_transformer1 = get_reranked_scores(model1, tokenizer_transformers1, query_pl, text_pl)
             scores_transformer2 = get_reranked_scores(model2, tokenizer_transformers2, query_pl, text_pl)
-            scores_transformer = [(s1+s2)/2 for s1,s2 in zip(scores_transformer1, scores_transformer2)]
+            #scores_transformer = [(s1+s2)/2 for s1,s2 in zip(scores_transformer1, scores_transformer2)]
+            scores_transformer = [(3*s1+2*s2)/6 for s1,s2 in zip(scores_transformer1, scores_transformer2)]
+            #trzeba skalibrować
 
+            if min(scores_transformer1) < min_model1 :
+                min_model1 = min(scores_transformer1)
+
+            if max(scores_transformer1) > max_model1 :
+                max_model1 = max(scores_transformer1)
+
+            if min(scores_transformer2) < min_model2 :
+                min_model2 = min(scores_transformer2)
+
+            if max(scores_transformer2) > max_model2 :
+                max_model2 = max(scores_transformer2)
 
             new_order = [top10_indices_batch[a] for a in np.argsort(scores_transformer)   ]
 
@@ -85,6 +102,13 @@ def run(df_passages, ranker, in_file, out_file, top_n):
         for o in tqdm(top10_indices):
             o = [str(a) for a in o]
             f_out.write('\t'.join(o) + '\n')
+    print('model1')
+    print(min_model1)
+    print(max_model1)
+
+    print('model2')
+    print(min_model2)
+    print(max_model2)
             
 if sys.argv[1] == '1':
 
@@ -125,3 +149,4 @@ elif sys.argv[1] == '4':
         df_passages_allegro = pickle.load(f_out)
 
     run(df_passages_allegro, bm25_allegro,'../../data/2022-passage-retrieval-fastbm25-eng/test-A-allegro/in.tsv-en' , f'../../data/2022-passage-retrieval-fastbm25-eng/test-A-allegro/out-{sys.argv[2]}.tsv', NR_OF_INDICES)
+
