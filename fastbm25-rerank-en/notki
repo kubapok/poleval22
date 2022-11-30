@@ -99,3 +99,10 @@ test-A 69.62
 26 jw, tylko skalibrowane wagi zeby było po równo
 dev 69.4
 
+
+jak 25, tylko z uśrednianiem dropoutu na model.eval()
+dev 42.08
+
+
+
+
