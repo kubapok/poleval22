@@ -68,8 +68,7 @@ nie wrzucałem na strone
 23
 cross-encoder/mmarco-mdeberta-v3-base-5negs-v1 
 rerank z 300
-dev 41.25
-test-A 69.09
+dev 41.25 test-A 69.09
 
 
 24 
@@ -100,46 +99,20 @@ test-A 69.62
 dev 69.4
 
 
-
-28
-zwiekszenie limitu na 2000 dokumentów do rerankowania,
-ensemble z 2:
-model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
-model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
-dev-0 45.08
-test-A 70.30
+jak 25, tylko z uśrednianiem dropoutu na model.eval()
+dev 42.08
 
 
 
-tak jak 28 tylko sama deberta:
-dev 44.84
+
+minimarco po finetune
+dev-0 - pierwsza epoka- 37.25
+
+27
+około 20 epok
+dev-0  43.18
+test-A 49.36
 
 
-trening na train_dataset_for_rerank_50_negs_1000.pickle
-oraz ewaluacja na dev-0_dataset_for_rerank_5_negs_30.pickle
-branie 500 minilm:
-bez finetuningu
-dev 36.64
-
-dostrajanie minilm best epoch
-dev 42.66
-
-dostrajanie minilm last epoch
-dev 42.41
-
-
-finetunowany cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01
-dev 45.49 rerank na 2000
-
-
-
-model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
-z 2000
-dev 48.84
-
-
-29
-model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
-z 3000
-dev 48.21
-test-A - JESZCZE NIE MA WYNIKU ZE STRONY
+minimarco po finetune
+dev-0 16.38

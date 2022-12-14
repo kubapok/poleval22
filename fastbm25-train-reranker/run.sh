@@ -6,8 +6,8 @@ export CUDA_VISIBLE_DEVICES=0
 #python 1_save.py  $PARAMS
 python 2.py 1 $PARAMS  
 python 2.py 2 $PARAMS  
-python 2.py 3 $PARAMS  
-python 2.py 4 $PARAMS  
+#python 2.py 3 $PARAMS  
+#python 2.py 4 $PARAMS  
 
 wait
 bash 3.sh
