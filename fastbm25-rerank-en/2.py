@@ -19,6 +19,9 @@ DEVICE='cuda'
 #model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-11_18-29-18'
 #model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
 #model_name1='output/cross-encoder-mmarco-mMiniLMv2-L12-H384-v1-2022-12-14_14-09-40'
+
+#model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mMiniLMv2-L12-H384-v1-2022-12-14_14-09-40'
+model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-base-cased-2022-12-14_17-34-54'
 model1 = AutoModelForSequenceClassification.from_pretrained(model_name1)
 tokenizer_transformers1 = AutoTokenizer.from_pretrained(model_name1,use_fast=False)
 model1.to(DEVICE)
@@ -34,6 +37,7 @@ model1.eval()
 
 DATA_DIR = 'DATA_PROCESSED'
 PARAMS = get_params_dict(sys.argv[2])
+CHALLENGEDIR = sys.argv[3]
 
 
 tokenizer_okapi = Tokenizer(PARAMS)
@@ -124,7 +128,7 @@ if sys.argv[1] == '1':
     with open(DATA_DIR + '/df_passages_wiki.pkl','rb') as f_out:
         df_passages_wiki = pickle.load(f_out)
 
-    run(df_passages_wiki, bm25_wiki,'../../data/2022-passage-retrieval-fastbm25-eng/dev-0/in.tsv-en' , f'../../data/2022-passage-retrieval-fastbm25-eng/dev-0/out-{sys.argv[2]}.tsv', NR_OF_INDICES)
+    run(df_passages_wiki, bm25_wiki,f'{CHALLENGEDIR}/dev-0/in.tsv-en' , f'{CHALLENGEDIR}/dev-0/out-{sys.argv[2]}.tsv', NR_OF_INDICES)
 
 elif sys.argv[1] == '2':
 
@@ -134,7 +138,7 @@ elif sys.argv[1] == '2':
     with open(DATA_DIR + '/df_passages_wiki.pkl','rb') as f_out:
         df_passages_wiki = pickle.load(f_out)
 
-    run(df_passages_wiki, bm25_wiki,'../../data/2022-passage-retrieval-fastbm25-eng/test-A-wiki/in.tsv-en' , f'../../data/2022-passage-retrieval-fastbm25-eng/test-A-wiki/out-{sys.argv[2]}.tsv', NR_OF_INDICES)
+    run(df_passages_wiki, bm25_wiki,f'{CHALLENGEDIR}/test-A-wiki/in.tsv-en' , f'{CHALLENGEDIR}/test-A-wiki/out-{sys.argv[2]}.tsv', NR_OF_INDICES)
 
 elif sys.argv[1] == '3':
 
@@ -144,7 +148,7 @@ elif sys.argv[1] == '3':
     with open(DATA_DIR + '/df_passages_legal.pkl','rb') as f_out:
         df_passages_legal = pickle.load(f_out)
 
-    run(df_passages_legal, bm25_legal,'../../data/2022-passage-retrieval-fastbm25-eng/test-A-legal/in.tsv-en' , f'../../data/2022-passage-retrieval-fastbm25-eng/test-A-legal/out-{sys.argv[2]}.tsv', NR_OF_INDICES)
+    run(df_passages_legal, bm25_legal,f'{CHALLENGEDIR}/test-A-legal/in.tsv-en' , f'{CHALLENGEDIR}/test-A-legal/out-{sys.argv[2]}.tsv', NR_OF_INDICES)
 
 elif sys.argv[1] == '4':
 
@@ -154,5 +158,5 @@ elif sys.argv[1] == '4':
     with open(DATA_DIR + '/df_passages_allegro.pkl','rb') as f_out:
         df_passages_allegro = pickle.load(f_out)
 
-    run(df_passages_allegro, bm25_allegro,'../../data/2022-passage-retrieval-fastbm25-eng/test-A-allegro/in.tsv-en' , f'../../data/2022-passage-retrieval-fastbm25-eng/test-A-allegro/out-{sys.argv[2]}.tsv', NR_OF_INDICES)
+    run(df_passages_allegro, bm25_allegro,f'{CHALLENGEDIR}/test-A-allegro/in.tsv-en' , f'{CHALLENGEDIR}/test-A-allegro/out-{sys.argv[2]}.tsv', NR_OF_INDICES)
 

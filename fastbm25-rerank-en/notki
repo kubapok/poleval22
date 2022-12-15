@@ -169,4 +169,23 @@ dev-0 51.60
 test-A 72.23
 
 
-33 -minimarco finetunowany do wiki
+
+minimarco finetunowany do wiki
+dev 43.28
+
+
+
+model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-base-cased-2022-12-14_17-34-54'
+herbert base finetunowany wyłącznie do msmarco przetłumaczonego na polski
+dev-0 37.06
+
+
+minimarco finetunowany do wiki + deberta finetunowana do wiki
+dev
+
+
+minimarco finetunowany do wiki + deberta finetunowana do wiki + deberta out of the box
+dev
+
+
+
