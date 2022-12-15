@@ -14,10 +14,11 @@ import re
 DEVICE='cuda'
 
 
-#model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
-model_name1='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
-model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-11_18-29-18'
-model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
+#model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
+#model_name1='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+#model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-11_18-29-18'
+#model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
+#model_name1='output/cross-encoder-mmarco-mMiniLMv2-L12-H384-v1-2022-12-14_14-09-40'
 model1 = AutoModelForSequenceClassification.from_pretrained(model_name1)
 tokenizer_transformers1 = AutoTokenizer.from_pretrained(model_name1,use_fast=False)
 model1.to(DEVICE)
@@ -81,8 +82,7 @@ def run(df_passages, ranker, in_file, out_file, top_n):
             #scores_transformer1 = get_reranked_scores(model1, tokenizer_transformers1, query_pl, text_pl)
             #scores_transformer2 = get_reranked_scores(model2, tokenizer_transformers2, query_pl, text_pl)
             #scores_transformer = [(s1+s2)/2 for s1,s2 in zip(scores_transformer1, scores_transformer2)]
-            ##scores_transformer = [(3*s1+2*s2)/6 for s1,s2 in zip(scores_transformer1, scores_transformer2)]
-
+            #scores_transformer = [(3*s1+2*s2)/6 for s1,s2 in zip(scores_transformer1, scores_transformer2)]
             scores_transformer = get_reranked_scores(model1, tokenizer_transformers1, query_pl, text_pl)
 
             

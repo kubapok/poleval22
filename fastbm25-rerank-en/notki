@@ -140,6 +140,33 @@ dev 48.84
 
 29
 model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
+dotrenowywanie
 z 3000
 dev 48.21
-test-A - JESZCZE NIE MA WYNIKU ZE STRONY
+test-A - 29.06
+
+30
+zwiekszenie limitu na 3000 dokumentów do rerankowania,
+ensemble z 2:
+model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+dev 45.53
+test 70.26
+
+
+31- ensembl z 29 -i 30 wiki z 29, a legal, allegro z 30
+test-A 70.87
+
+
+32
+legal i allegro tak jak w 30
+wiki ensemble z 
+cross-encoder/mmarco-mdeberta-v3-base-5negs-v1 oraz '/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
+allegro i legal ensemble z 
+model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+dev-0 51.60
+test-A 72.23
+
+
+33 -minimarco finetunowany do wiki
