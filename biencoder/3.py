@@ -13,11 +13,10 @@ import re
 DATA_DIR = 'DATA_PROCESSED'
 CHALLANGEDIR = sys.argv[2]
 
-
-
-
 DEVICE='cuda'
-embedder = SentenceTransformer('all-MiniLM-L6-v2').to(DEVICE)
+
+MODEL='all-MiniLM-L12-v2'
+embedder = SentenceTransformer(MODEL)
 
 
 NR_OF_INDICES=10
@@ -37,12 +36,13 @@ def run(df_passages, corpus_embeddings, in_file, out_file, top_n):
         for line in tqdm(f_in):
             dataset, query_pl, query_en = line.rstrip().split('\t')
 
-            results_indices = retrieve(embedder, corpus_embeddings, query_en)
-            
-            top10_indices = df_passages.iloc[results_indices]['id'].tolist()
+            results_indices = retrieve(embedder, corpus_embeddings, query_en) # dostajemy id w korpusie embeddingów
+
+            top10_indices_batch = df_passages.iloc[results_indices]['id'].tolist()
+            top10_indices.append(top10_indices_batch)
 
 
-        for o in tqdm(top10_indices):
+        for o in top10_indices:
             o = [str(a) for a in o]
             f_out.write('\t'.join(o) + '\n')
 
@@ -52,14 +52,14 @@ if sys.argv[1] == '1':
     with open(DATA_DIR + '/df_passages_wiki.pkl','rb') as f_out:
         df_passages_wiki = pickle.load(f_out)
 
-    with open(f'{DATA_DIR}/corpus_embeddings_wiki.pickle', 'rb') as f_out:
+    with open(f'{DATA_DIR}/corpus_embeddings_wiki_{MODEL}.pickle', 'rb') as f_out:
         corpus_embeddings_wiki = pickle.load(f_out)
 
     run(df_passages_wiki, corpus_embeddings_wiki, f'{CHALLANGEDIR}/dev-0/in.tsv-en' , f'{CHALLANGEDIR}/dev-0/out.tsv', NR_OF_INDICES)
 
 elif sys.argv[1] == '2':
 
-    with open(f'{DATA_DIR}/corpus_embeddings_wiki.pickle', 'rb') as f_out:
+    with open(f'{DATA_DIR}/corpus_embeddings_wiki_{MODEL}.pickle', 'rb') as f_out:
         corpus_embeddings_wiki = pickle.load(f_out)
 
     with open(DATA_DIR + '/df_passages_wiki.pkl','rb') as f_out:
@@ -68,7 +68,7 @@ elif sys.argv[1] == '2':
     run(df_passages_wiki, corpus_embeddings_wiki, f'{CHALLANGEDIR}/test-A-wiki/in.tsv-en' , f'{CHALLANGEDIR}/test-A-wiki/out.tsv', NR_OF_INDICES)
 
 elif sys.argv[1] == '3':
-    with open(f'{DATA_DIR}/corpus_embeddings_legal.pickle', 'rb') as f_out:
+    with open(f'{DATA_DIR}/corpus_embeddings_legal_{MODEL}.pickle', 'rb') as f_out:
         corpus_embeddings_legal = pickle.load(f_out)
 
     with open(DATA_DIR + '/df_passages_legal.pkl','rb') as f_out:
@@ -78,7 +78,7 @@ elif sys.argv[1] == '3':
     run(df_passages_legal, corpus_embeddings_legal, f'{CHALLANGEDIR}/test-A-legal/in.tsv-en' , f'{CHALLANGEDIR}/test-A-legal/out.tsv', NR_OF_INDICES)
 
 elif sys.argv[1] == '4':
-    with open(f'{DATA_DIR}/corpus_embeddings_allegro.pickle', 'rb') as f_out:
+    with open(f'{DATA_DIR}/corpus_embeddings_allegro_{MODEL}.pickle', 'rb') as f_out:
         corpus_embeddings_allegro = pickle.load(f_out)
 
 

@@ -3,7 +3,14 @@ import torch
 import pandas as pd
 import pickle
 
-embedder = SentenceTransformer('all-MiniLM-L6-v2').to('cuda')
+#MODEL='all-MiniLM-L6-v2'
+#MODEL='all-mpnet-base-v2'
+#MODEL='nq-distilbert-base-v1'
+#MODEL='multi-qa-mpnet-base-dot-v1'
+#MODEL='multi-qa-MiniLM-L6-cos-v1'
+MODEL='all-MiniLM-L12-v2'
+BATCH_SIZE=128
+embedder = SentenceTransformer(MODEL)
 
 DATA_DIR = '../../data/poleval-passage-retrieval-eng'
 DATAOUTPUT = 'DATA_PROCESSED'
@@ -31,17 +38,17 @@ list_legal_passages = df_passages_legal['text_en'].tolist()
 corpus_embeddings_allegro = embedder.encode(list_allegro_passages, convert_to_tensor=True, device='cuda')
 corpus_embeddings_legal = embedder.encode(list_legal_passages, convert_to_tensor=True,device='cuda')
 print('wiki legal')
-BATCH_SIZE=2048
+
 corpus_embeddings_wiki = embedder.encode(list_wiki_passages, convert_to_tensor=True,batch_size=BATCH_SIZE,device='cuda',show_progress_bar=True)
 print('wiki done')
 
-with open(f'{DATAOUTPUT}/corpus_embeddings_allegro.pickle', 'wb') as f_out:
+with open(f'{DATAOUTPUT}/corpus_embeddings_allegro_{MODEL}.pickle', 'wb') as f_out:
     pickle.dump(corpus_embeddings_allegro, f_out)
 
-with open(f'{DATAOUTPUT}/corpus_embeddings_legal.pickle', 'wb') as f_out:
+with open(f'{DATAOUTPUT}/corpus_embeddings_legal_{MODEL}.pickle', 'wb') as f_out:
     pickle.dump(corpus_embeddings_legal, f_out)
 
-with open(f'{DATAOUTPUT}/corpus_embeddings_wiki.pickle', 'wb') as f_out:
+with open(f'{DATAOUTPUT}/corpus_embeddings_wiki_{MODEL}.pickle', 'wb') as f_out:
     pickle.dump(corpus_embeddings_wiki, f_out)
 
 corpus = list_wiki_passages

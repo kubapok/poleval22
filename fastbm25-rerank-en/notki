@@ -169,7 +169,6 @@ dev-0 51.60
 test-A 72.23
 
 
-
 minimarco finetunowany do wiki
 dev 43.28
 
@@ -180,12 +179,61 @@ herbert base finetunowany wyłącznie do msmarco przetłumaczonego na polski
 dev-0 37.06
 
 
-minimarco finetunowany do wiki + deberta finetunowana do wiki
+BIENCODER PL
+distiluse-base-multilingual-cased-v1 na polskim 
+dev 9.26
+
+BIENCODERL PL
+distiluse-base-multilingual-cased-v2
+dev 6.98
+
+
+BIENCODERL PL
+paraphrase-multilingual-mpnet-base-v2
+dev
+
+BIENCODERL PL
+multi-qa-MiniLM-L6-cos-v1
+dev
+
+BIENCODERL PL
+all-mpnet-base-v2 na języku ang
 dev
 
 
-minimarco finetunowany do wiki + deberta finetunowana do wiki + deberta out of the box
+
+BIENCODER ENG
+all-MiniLM-L6-v2 na języku angielskim
+dev 18.31
+
+
+BIENCODER ENG
+all-mpnet-base-v2 na języku ang
+dev 21.00
+
+
+BIENCODERL ENG
+nq-distilbert-base-v1
+dev 16.06
+
+
+BIENCODERL ENG
+multi-qa-mpnet-base-dot-v1
+dev 12.53
+
+BIENCODERL ENG
+multi-qa-MiniLM-L6-cos-v1
+dev 18.03
+
+BIENCODER ENG
+all-MiniLM-L12-v2
 dev
 
 
+BIENCODER ENG
+msmarco-distilbert-cos-v5
+dev
 
+BIENCODER ENG
+msmarco-bert-base-dot-v5
+dev
