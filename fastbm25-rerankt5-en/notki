@@ -177,6 +177,10 @@ minimarco finetunowany do wiki
 dev 43.28
 
 
+
+
+
+
 model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-base-cased-2022-12-14_17-34-54'
 herbert base finetunowany wyłącznie do msmarco przetłumaczonego na polski
 dev-0 37.06
@@ -197,8 +201,9 @@ model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranke
 
 
 
-model_name1='/mnt/gpu_data1/kubapok/mMARCO/scripts/mminilm-pl221207-epoch0.34-loss0.0734/checkpoint-529000/'
-dev 25.59
+
+33
+deberta minilm mt5 na 3000
 
 
 

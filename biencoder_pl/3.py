@@ -15,8 +15,9 @@ CHALLANGEDIR = sys.argv[2]
 
 DEVICE='cuda'
 
+#MODEL='all-MiniLM-L6-v2'
 #MODEL='all-mpnet-base-v2'
-MODEL='sebastian-hofstaetter/colbert-distilbert-margin_mse-T2-msmarco'
+MODEL='paraphrase-multilingual-mpnet-base-v2'
 embedder = SentenceTransformer(MODEL)
 
 
@@ -37,7 +38,7 @@ def run(df_passages, corpus_embeddings, in_file, out_file, top_n):
         for line in tqdm(f_in):
             dataset, query_pl, query_en = line.rstrip().split('\t')
 
-            results_indices = retrieve(embedder, corpus_embeddings, query_en) # dostajemy id w korpusie embeddingów
+            results_indices = retrieve(embedder, corpus_embeddings, query_pl) # dostajemy id w korpusie embeddingów
 
             top10_indices_batch = df_passages.iloc[results_indices]['id'].tolist()
             top10_indices.append(top10_indices_batch)

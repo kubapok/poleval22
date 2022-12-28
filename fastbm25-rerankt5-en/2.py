@@ -7,7 +7,7 @@ from tqdm import tqdm
 from tokenizer_function import Tokenizer
 from argument_parser import get_params_dict
 import sys
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, AutoModelForSeq2SeqLM
 import torch
 import re
 
@@ -27,33 +27,36 @@ DEVICE='cuda'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-large-cased-2022-12-18_11-08-41'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-xlm-roberta-large-2022-12-18_20-44-13'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-large-cased-2022-12-18_20-43-57-latest'
-model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-20_12-50-31' # dev 52.11
-model_name1='/mnt/gpu_data1/kubapok/mMARCO/scripts/mminilm-pt'
-model1 = AutoModelForSequenceClassification.from_pretrained(model_name1)
+model_name1='unicamp-dl/mt5-base-mmarco-v2'
+model1 = AutoModelForSeq2SeqLM.from_pretrained(model_name1)
 tokenizer_transformers1 = AutoTokenizer.from_pretrained(model_name1,use_fast=False)
 model1.to(DEVICE)
 model1.eval()
 
-#model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
-#model_name2='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-20_12-50-31-latest'
-#model2 = AutoModelForSequenceClassification.from_pretrained(model_name2)
-#tokenizer_transformers2 = AutoTokenizer.from_pretrained(model_name2,use_fast=False)
-#model2.to(DEVICE)
-#model2.eval()
+model_name2='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-20_12-50-31-latest'
+model2 = AutoModelForSequenceClassification.from_pretrained(model_name2)
+tokenizer_transformers2 = AutoTokenizer.from_pretrained(model_name2,use_fast=False)
+model2.to(DEVICE)
+model2.eval()
 
 
+model_name3='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model3 = AutoModelForSequenceClassification.from_pretrained(model_name3)
+tokenizer_transformers3 = AutoTokenizer.from_pretrained(model_name2,use_fast=False)
+model3.to(DEVICE)
+model3.eval()
 
-DATA_DIR = 'DATA_PROCESSED'
+DATA_DIR = '../fastbm25-rerank-en/DATA_PROCESSED'
 PARAMS = get_params_dict(sys.argv[2])
 CHALLENGEDIR = sys.argv[3]
 
 
 tokenizer_okapi = Tokenizer(PARAMS)
-NR_OF_INDICES=3000
+NR_OF_INDICES=30
 
 
 def get_reranked_scores(model, tokenizer_transformer, query_pl, text_pl):
-    bs=30
+    bs=5
     scores_transformer = list()
     for i in range(0,len(text_pl), bs):
         #features_transformer = tokenizer_transformer(query_en, text_en, padding=True, truncation=True, return_tensors='pt')
@@ -66,6 +69,32 @@ def get_reranked_scores(model, tokenizer_transformer, query_pl, text_pl):
         except:
             import pdb; pdb.set_trace()
     return scores_transformer
+
+
+
+
+def get_reranked_scorest5(model, tokenizer_transformer, query_pl, text_pl):
+    # https://github.com/vjeronymo2/pygaggle/blob/308f2e9f255c762fec0c22d5bd0e4e7f6bb4515b/pygaggle/run/finetune_monot5.py#L23
+    with torch.no_grad():
+        bs=3
+        scores_transformer = list()
+        inputs = [f'Query: {q} Document: {d} Relevant: ' for q, d in zip(query_pl, text_pl)]
+        for i in range(0,len(inputs), bs):
+            #features_transformer = tokenizer_transformer(query_en, text_en, padding=True, truncation=True, return_tensors='pt')
+            
+            inputs_batch = inputs[i:i+bs]
+            features_transformer = tokenizer_transformer(inputs_batch, return_tensors='pt', truncation=True, max_length=512, padding=True).to(DEVICE)
+            outputs = model.generate(**features_transformer, return_dict_in_generate=True, output_scores=True, num_beams=10)
+            answers = outputs[0].squeeze()[:,1].tolist()
+            scores = outputs[1].tolist()
+            scores_transformer_batch = [np.exp(s) if a == 36339 else 1-np.exp(s) for a,s in zip(answers, scores)]
+
+            #scores_transformer_batch = [a[1] for a in scores_transformer_batch] # to tylko jak jest podwójny output w niektórych modelach!!!!
+            try:
+                scores_transformer += scores_transformer_batch[:]
+            except:
+                import pdb; pdb.set_trace()
+    return [-(a*20 - 10) for a in scores_transformer]
 
 
 
@@ -91,11 +120,14 @@ def run(df_passages, ranker, in_file, out_file, top_n):
             query_pl = [query_pl]*len(text_pl) # do wywalenia
 
 
-            #scores_transformer1 = get_reranked_scores(model1, tokenizer_transformers1, query_pl, text_pl)
+            scores_transformer1 = get_reranked_scorest5(model1, tokenizer_transformers1, query_pl, text_pl)
+            scores_transformer2 = get_reranked_scores(model2, tokenizer_transformers2, query_pl, text_pl)
+            scores_transformer3 = get_reranked_scores(model3, tokenizer_transformers3, query_pl, text_pl)
+            #scores_transformer1 = get_reranked_scorest5(model1, tokenizer_transformers1, query_pl, text_pl)
             #scores_transformer2 = get_reranked_scores(model2, tokenizer_transformers2, query_pl, text_pl)
-            #scores_transformer = [(s1+s2)/2 for s1,s2 in zip(scores_transformer1, scores_transformer2)]
+            import pdb; pdb.set_trace()
+            scores_transformer = [(s1+s2+s3)/2 for s1,s2,s3 in zip(scores_transformer1, scores_transformer2,scores_transformer3)]
             #scores_transformer = [(3*s1+2*s2)/6 for s1,s2 in zip(scores_transformer1, scores_transformer2)]
-            scores_transformer = get_reranked_scores(model1, tokenizer_transformers1, query_pl, text_pl)
 
             
 

@@ -192,16 +192,6 @@ dev 49.90 # to jest poprawka względem wcześniej, także można użyć
 
 
 
-model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-20_12-50-31' # dev 52.11 - to jest ten sam co latest
-model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01' # dev 48.21 - nie ma latest
-
-
-
-model_name1='/mnt/gpu_data1/kubapok/mMARCO/scripts/mminilm-pl221207-epoch0.34-loss0.0734/checkpoint-529000/'
-dev 25.59
-
-
-
 BIENCODER PL
 distiluse-base-multilingual-cased-v1 na polskim 
 dev 9.26

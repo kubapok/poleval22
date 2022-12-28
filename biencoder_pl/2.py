@@ -4,29 +4,23 @@ import pandas as pd
 import pickle
 
 #MODEL='all-MiniLM-L6-v2'
-#MODEL='nq-distilbert-base-v1'
-#MODEL='multi-qa-mpnet-base-dot-v1'
-#MODEL='multi-qa-MiniLM-L6-cos-v1'
-#MODEL='all-MiniLM-L12-v2'
-#MODEL='msmarco-distilbert-cos-v5'
-#MODEL='msmarco-bert-base-dot-v5'
 #MODEL='all-mpnet-base-v2'
-#MODEL='sebastian-hofstaetter/colbert-distilbert-margin_mse-T2-msmarco'
-MODEL='sebastian-hofstaetter/distilbert-dot-margin_mse-T2-msmarco'
-BATCH_SIZE=128
+#MODEL='distiluse-base-multilingual-cased-v2'
+MODEL='paraphrase-multilingual-mpnet-base-v2'
+BATCH_SIZE=512
 embedder = SentenceTransformer(MODEL)
 
 DATA_DIR = '../../data/poleval-passage-retrieval-eng'
 DATAOUTPUT = 'DATA_PROCESSED'
 
 
-df_passages_wiki = pd.read_json(DATA_DIR + '/wiki-trivia/passages.jl-en', lines=True)
+df_passages_wiki = pd.read_json(DATA_DIR + '/wiki-trivia/passages.jl', lines=True)
 df_passages_wiki['passage_id'] = df_passages_wiki['meta'].apply(lambda x : x['passage_id'])
 df_passages_wiki['article_id'] = df_passages_wiki['meta'].apply(lambda x : x['article_id'])
 df_passages_wiki['set'] = df_passages_wiki['article_id'].astype(str) + '-' + df_passages_wiki['passage_id'].astype(str)
 
-df_passages_legal = pd.read_json(DATA_DIR + '/legal-questions/passages.jl-en', lines=True)
-df_passages_allegro = pd.read_json(DATA_DIR + '/allegro-faq/passages.jl-en', lines=True)
+df_passages_legal = pd.read_json(DATA_DIR + '/legal-questions/passages.jl', lines=True)
+df_passages_allegro = pd.read_json(DATA_DIR + '/allegro-faq/passages.jl', lines=True)
 
 #df_queries_train = pd.read_csv('../../data/2022-passage-retrieval-eng/train/in.tsv-en', sep =  '\t', names = ('source', 'text'))
 #df_queries_dev = pd.read_csv('../../data/2022-passage-retrieval-eng/dev-0/in.tsv-en', sep =  '\t', names = ('source', 'text'))
@@ -35,9 +29,9 @@ df_passages_allegro = pd.read_json(DATA_DIR + '/allegro-faq/passages.jl-en', lin
 #df_queries_test_allegro = pd.read_csv('../../data/2022-passage-retrieval-eng/test-A-allegro/in.tsv-en', sep =  '\t', names = ('source', 'text'))
 print('reading done')
 
-list_wiki_passages = df_passages_wiki['text_en'].tolist()
-list_allegro_passages = df_passages_allegro['text_en'].tolist()
-list_legal_passages = df_passages_legal['text_en'].tolist()
+list_wiki_passages = df_passages_wiki['text'].tolist()
+list_allegro_passages = df_passages_allegro['text'].tolist()
+list_legal_passages = df_passages_legal['text'].tolist()
 
 corpus_embeddings_allegro = embedder.encode(list_allegro_passages, convert_to_tensor=True, device='cuda')
 corpus_embeddings_legal = embedder.encode(list_legal_passages, convert_to_tensor=True,device='cuda')

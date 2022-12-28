@@ -15,8 +15,7 @@ CHALLANGEDIR = sys.argv[2]
 
 DEVICE='cuda'
 
-#MODEL='all-mpnet-base-v2'
-MODEL='sebastian-hofstaetter/colbert-distilbert-margin_mse-T2-msmarco'
+MODEL='all-mpnet-base-v2'
 embedder = SentenceTransformer(MODEL)
 
 

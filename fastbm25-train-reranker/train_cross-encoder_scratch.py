@@ -39,13 +39,15 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 
 #First, we define the transformer model we want to fine-tune
 #model_name = 'distilroberta-base'
-#model_name = 'cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+model_name = 'cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+model_name='/mnt/gpu_data1/kubapok/cache/models--cross-encoder--mmarco-mdeberta-v3-base-5negs-v1/snapshots/e4639f2fcee3da997e7da0a0948229ac172f83b1'
 #model_name = 'cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
 
 #model_name='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
 #train_batch_size = 64
 #model_name = 'allegro/herbert-base-cased'
-model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+#model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+#model_name='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-15_11-05-06'
 #model_name='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
 #model_name='xlm-roberta-large'
 #model_name='allegro/herbert-base-cased'
@@ -53,7 +55,7 @@ model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
 #model_name='google/mt5-large'
 train_batch_size = 64
 
-num_epochs = 50
+num_epochs = 10
 model_save_path = 'output/'+model_name.replace("/", "-")+'-'+datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 
@@ -61,7 +63,7 @@ model_save_path = 'output/'+model_name.replace("/", "-")+'-'+datetime.now().strf
 model = CrossEncoder(model_name, num_labels=1, max_length=512)
 
 # TRAIN DATASET
-with open('train_dataset_for_rerank_50_negs_1000.pickle','rb') as f_in:
+with open('train_dataset_for_rerank_100_negs_2000.pickle','rb') as f_in:
 #with open('train_dataset_for_rerank_100_negs_2000.pickle','rb') as f_in:
     text_pair_data_train = pickle.load(f_in)
 
@@ -97,7 +99,7 @@ train_dataloader = DataLoader(train_samples, shuffle=True, batch_size=train_batc
 evaluator = CERerankingEvaluator(dev_samples, name='train-eval',mrr_at_k=30)
 
 # Configure the training
-warmup_steps = 1000
+warmup_steps = 2000
 logging.info("Warmup-steps: {}".format(warmup_steps))
 
 print(" TRENING SIE ZACZYNA")
@@ -109,7 +111,7 @@ model.fit(train_dataloader=train_dataloader,
           evaluation_steps=1000,
           warmup_steps=warmup_steps,
           output_path=model_save_path,
-          optimizer_params={'lr':2e-6},
+          optimizer_params={'lr':1e-6},
           scheduler = 'constantlr',
           use_amp=False)
 
