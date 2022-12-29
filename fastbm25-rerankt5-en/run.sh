@@ -5,9 +5,9 @@ CHALLENGEDIR='../../data/2022-passage-retrieval-t5-eng'
 export CUDA_VISIBLE_DEVICES=1
 #bash 0.sh
 #python 1_save.py  $PARAMS
-python 2.py 3 $PARAMS  $CHALLENGEDIR
-python 2.py 4 $PARAMS  $CHALLENGEDIR
-#python 2.py 1 $PARAMS  $CHALLENGEDIR 
+#python 2.py 3 $PARAMS  $CHALLENGEDIR
+#python 2.py 4 $PARAMS  $CHALLENGEDIR
+python 2.py 1 $PARAMS  $CHALLENGEDIR 
 #python 2.py 2 $PARAMS  $CHALLENGEDIR
 
 wait

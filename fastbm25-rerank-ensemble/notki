@@ -1,0 +1,269 @@
+obecnie testowane:
+22.17
+
+
+
+12- rerank na 10
+dev 25.18
+test-A 54.61
+
+
+
+13 - zwiększenie z 10 do 30 
+dev  28.81
+test-A 57.2
+
+
+15 zwiekszanie rerank do 50
+dev  29.76
+test-A 57.45
+
+
+16 zwiekszanie rerank do 70
+dev 30.63
+test-A 57.65
+
+17 rerank 100
+model_name='cross-encoder/ms-marco-MiniLM-L-6-v2'
+dev 31.48
+test  57.71
+
+
+19 
+zmiana z 
+model_name='cross-encoder/ms-marco-MiniLM-L-6-v2'
+na
+model_name='cross-encoder/ms-marco-MiniLM-L-12-v2'
+dev 31.61
+test-A 58.29
+
+
+
+20
+zmiana modelu na multilingual i użycie języka polskiego
+model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+dev 36.25
+test-A 66.31
+
+21
+cross-encoder/mmarco-mdeberta-v3-base-5negs-v1
+dev 38.40
+test-A 68.39
+
+
+22
+jak poprzednio tylko reranking z 200, a nie 100
+dev 40.05
+test-A 69.01
+
+
+
+dev 33.52
+100, ale 
+model_name = 'amberoad/bert-multilingual-passage-reranking-msmarco'
+nie wrzucałem na strone
+
+
+
+23
+cross-encoder/mmarco-mdeberta-v3-base-5negs-v1 
+rerank z 300
+dev 41.25
+test-A 69.09
+
+
+24 
+rerank z 500
+dev 42.70
+test-A 69.31
+
+
+
+-----
+model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+rarank 500 oraz truncation='only_second' 
+dev 38.65
+
+
+25
+ensemble z 
+model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+dla legal i allegro trzeba zredukować BS do 50
+ale nie ma żadnego ważenia, a min/max są chyba rózne, można użyć minmaxscaler
+z 500
+dev 43.0 
+test-A 69.62
+
+
+26 jw, tylko skalibrowane wagi zeby było po równo
+dev 69.4
+
+
+
+28
+zwiekszenie limitu na 2000 dokumentów do rerankowania,
+ensemble z 2:
+model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+dev-0 45.08
+test-A 70.30
+
+
+
+tak jak 28 tylko sama deberta:
+dev 44.84
+
+
+trening na train_dataset_for_rerank_50_negs_1000.pickle
+oraz ewaluacja na dev-0_dataset_for_rerank_5_negs_30.pickle
+branie 500 minilm:
+bez finetuningu
+dev 36.64
+
+dostrajanie minilm best epoch
+dev 42.66
+
+dostrajanie minilm last epoch
+dev 42.41
+
+
+finetunowany cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01
+dev 45.49 rerank na 2000
+
+
+
+model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
+z 2000
+dev 48.84
+
+
+29
+model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
+dotrenowywanie
+z 3000
+dev 48.21
+test-A - 29.06
+
+30
+zwiekszenie limitu na 3000 dokumentów do rerankowania,
+ensemble z 2:
+model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+dev 45.53
+test 70.26
+
+
+31- ensembl z 29 -i 30 wiki z 29, a legal, allegro z 30
+test-A 70.87
+
+
+32
+legal i allegro tak jak w 30
+wiki ensemble z 
+cross-encoder/mmarco-mdeberta-v3-base-5negs-v1 oraz '/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01'
+train_dataset_for_rerank_50_negs_1000.pickle
+dev-0_dataset_for_rerank_5_negs_30.pickle	
+
+
+allegro i legal ensemble z 
+model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+dev-0 51.60
+test-A 72.23
+
+
+minimarco finetunowany do wiki
+dev 43.28
+
+
+
+
+
+
+model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-base-cased-2022-12-14_17-34-54'
+herbert base finetunowany wyłącznie do msmarco przetłumaczonego na polski
+dev-0 37.06
+
+mdeberta wytrenowana, dodatkowo dotrenowywana do msmarco polskiego
+model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-16_21-58-42'
+dev 43.49 
+
+
+mdeberta wytrenowana, dodatkowo dotrenowywana do msmarco polskiego + dodatkowo dotrenowana na polskim wiki
+model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-16_21-58-42'
+dev 49.90 # to jest poprawka względem wcześniej, także można użyć
+
+
+
+model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-20_12-50-31' # dev 52.11 - to jest ten sam co latest
+model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-12_08-57-01' # dev 48.21 - nie ma latest
+
+
+
+
+33
+deberta minilm mt5 na 3000
+
+
+
+BIENCODER PL
+distiluse-base-multilingual-cased-v1 na polskim 
+dev 9.26
+
+BIENCODERL PL
+distiluse-base-multilingual-cased-v2
+dev 6.98
+
+
+BIENCODERL PL
+paraphrase-multilingual-mpnet-base-v2
+dev
+
+BIENCODERL PL
+multi-qa-MiniLM-L6-cos-v1
+dev
+
+BIENCODERL PL
+all-mpnet-base-v2 na języku ang
+dev
+
+
+
+BIENCODER ENG
+all-MiniLM-L6-v2 na języku angielskim
+dev 18.31
+
+
+BIENCODER ENG
+all-mpnet-base-v2 na języku ang
+dev 21.00
+
+
+BIENCODERL ENG
+nq-distilbert-base-v1
+dev 16.06
+
+
+BIENCODERL ENG
+multi-qa-mpnet-base-dot-v1
+dev 12.53
+
+BIENCODERL ENG
+multi-qa-MiniLM-L6-cos-v1
+dev 18.03
+
+BIENCODER ENG
+all-MiniLM-L12-v2
+17.28
+dev
+
+BIENCODER ENG
+msmarco-distilbert-cos-v5
+20.01
+dev
+
+BIENCODER ENG
+msmarco-bert-base-dot-v5
+14.68
+dev

@@ -1,0 +1,11 @@
+1. zrobić ensemble z  oss-encoder/ms-marco-MiniLM-L-4-v2 oss-encoder/ms-marco-MiniLM-L-6-v2 oraz oss-encoder/ms-marco-MiniLM-L-12-v2
+
+
+
+2. zrobić inferencje z dropout aktywny 
+
+
+3. 
+spróbować jeszcze inne modele z :
+https://huggingface.co/cross-encoder
+np mmarco-mdeberta-v3-base-5negs-v1
