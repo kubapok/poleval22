@@ -179,7 +179,7 @@ dev 43.28
 
 
 
-33
+33 fastbm25-rerank-ensemble-only-dev
 dev 52.74
 test-A 72.56 
 allegro i legal tak jak poprzednio ensemble z 
