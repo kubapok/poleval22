@@ -41,6 +41,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 #model_name = 'distilroberta-base'
 model_name = 'cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
 model_name='/mnt/gpu_data1/kubapok/cache/models--cross-encoder--mmarco-mdeberta-v3-base-5negs-v1/snapshots/e4639f2fcee3da997e7da0a0948229ac172f83b1'
+model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
 #model_name = 'cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
 
 #model_name='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'

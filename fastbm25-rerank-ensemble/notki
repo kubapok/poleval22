@@ -179,6 +179,15 @@ dev 43.28
 
 
 
+33
+dev 52.74
+test-A 72.56 
+allegro i legal tak jak poprzednio ensemble z 
+model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+
+a wiki ensemble z 2 dotrenowanych deberta +  deberta + minilm
+
 
 
 model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-base-cased-2022-12-14_17-34-54'

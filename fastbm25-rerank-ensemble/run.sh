@@ -5,6 +5,10 @@ CHALLENGEDIR='../../data/2022-passage-retrieval-ensemble'
 export CUDA_VISIBLE_DEVICES=1
 #bash 0.sh
 #python 1_save.py  $PARAMS
+
+
+
+
 python 21.py 1 $PARAMS  $CHALLENGEDIR 
 python 21.py 3 $PARAMS  $CHALLENGEDIR
 python 21.py 4 $PARAMS  $CHALLENGEDIR
