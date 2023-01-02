@@ -39,7 +39,7 @@ CHALLENGEDIR = sys.argv[3]
 
 
 tokenizer_okapi = Tokenizer(PARAMS)
-NR_OF_INDICES=3000
+NR_OF_INDICES=1500
 
 
 def get_reranked_scores(model, tokenizer_transformer, query_pl, text_pl):

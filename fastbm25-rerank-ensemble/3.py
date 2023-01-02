@@ -19,7 +19,7 @@ DEVICE='cuda'
 DATA_DIR = '../fastbm25-rerank-en/DATA_PROCESSED'
 PARAMS = get_params_dict(sys.argv[2])
 CHALLENGEDIR = sys.argv[3]
-NR_OF_INDICES=500
+NR_OF_INDICES=1500
 
 
 def run(in_file, out_file, model1_ranks,model2_ranks,model3_ranks):
@@ -28,7 +28,7 @@ def run(in_file, out_file, model1_ranks,model2_ranks,model3_ranks):
         top10_indices = pickle.load(f_in)
         for top10_indices_batch,m1,m2,m3  in zip(top10_indices,model1_ranks, model2_ranks, model3_ranks):
 
-            scores = [a3 for a1,a2,a3  in zip(m1,m2,m3)]
+            scores = [a1+a2+a3 for a1,a2,a3  in zip(m1,m2,m3)]
             new_order = [top10_indices_batch[a] for a in np.argsort(scores)   ]
             new_order = [str(a) for a in new_order[:10]]
             f_out.write('\t'.join(new_order) + '\n')

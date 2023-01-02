@@ -27,8 +27,9 @@ DEVICE='cuda'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-large-cased-2022-12-18_11-08-41'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-xlm-roberta-large-2022-12-18_20-44-13'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-large-cased-2022-12-18_20-43-57-latest'
-model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-20_12-50-31' # dev 52.11
-model_name1='/mnt/gpu_data1/kubapok/mMARCO/scripts/mminilm-pt'
+#model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker/output/cross-encoder-mmarco-mdeberta-v3-base-5negs-v1-2022-12-20_12-50-31' # dev 52.11
+#model_name1='/mnt/gpu_data1/kubapok/mMARCO/scripts/mminilm-pt'
+model_name1 = '/mnt/gpu_data1/kubapok/mMARCO/scripts/mminilm-pl/checkpoint-399500'
 model1 = AutoModelForSequenceClassification.from_pretrained(model_name1)
 tokenizer_transformers1 = AutoTokenizer.from_pretrained(model_name1,use_fast=False)
 model1.to(DEVICE)

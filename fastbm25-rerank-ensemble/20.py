@@ -20,7 +20,7 @@ CHALLENGEDIR = sys.argv[3]
 
 
 tokenizer_okapi = Tokenizer(PARAMS)
-NR_OF_INDICES=3000
+NR_OF_INDICES=1500
 
 
 def run(df_passages, ranker, in_file, out_file, top_n):

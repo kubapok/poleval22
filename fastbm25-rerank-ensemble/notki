@@ -190,6 +190,37 @@ a wiki ensemble z 2 dotrenowanych deberta +  deberta + minilm
 
 
 
+
+34 fastbm25-rerank-ensemble-only-dev
+dev 54.46
+test-A 73.15
+allegro i legal tak jak poprzednio ensemble z 
+model_name1='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
+model_name2='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
+
+a wiki ensemble z 2 dotrenowanych deberta +  deberta +  dotrenowany minilm
+
+
+
+
+
+35
+wiki jak poprzednio
+a legal + allegro: deberta, minilm , t5 na 1500 dokumentach
+dev 44.12
+test-A 73.04
+
+
+
+
+
+
+
+
+-------------------
+
+
+
 model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-base-cased-2022-12-14_17-34-54'
 herbert base finetunowany wyłącznie do msmarco przetłumaczonego na polski
 dev-0 37.06
@@ -211,8 +242,6 @@ model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranke
 
 
 
-33
-deberta minilm mt5 na 3000
 
 
 
