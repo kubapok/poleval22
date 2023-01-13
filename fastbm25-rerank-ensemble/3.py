@@ -28,7 +28,7 @@ def run(in_file, out_file, models_dict):
         top10_indices = pickle.load(f_in)
         for top10_indices_batch,m1,m2,m3,m4,m5  in zip(top10_indices,models_dict['mt5_base'],models_dict['deberta'],models_dict['mmini'],models_dict['mt53B'],models_dict['mt513B']   ):
 
-            scores = [a4 for a1,a2,a3,a4,a5 in zip(m1,m2,m3,m4,m5)]
+            scores = [a4+a5 for a1,a2,a3,a4,a5 in zip(m1,m2,m3,m4,m5)]
             new_order = [top10_indices_batch[a] for a in np.argsort(scores)   ]
             new_order = [str(a) for a in new_order[:10]]
             f_out.write('\t'.join(new_order) + '\n')

@@ -328,3 +328,19 @@ dev-0 46.30
 test-A 0.7201240458601234
 
 
+37
+mt5-13B
+rerank na 1500
+dev-0  48.41
+test-A 0.7327595390175089
+
+38
+ensemble  mt5-3B praz mt5-13B
+dev-0 48.69
+test-A  73.53 
+
+
+
+39
+ensemble- legal i allegro jak w 38, a wiki z 34
+test-A 0.7516350726159594
