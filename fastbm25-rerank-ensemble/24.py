@@ -61,8 +61,7 @@ def get_reranked_scorest5(model, tokenizer_transformer, query_pl, text_pl):
             except:
                 import pdb; pdb.set_trace()
             scores = outputs[1].tolist()
-            import pdb; pdb.set_trace()
-            scores_transformer_batch = [np.exp(s) if a == 36339 else 1-np.exp(s) for a,s in zip(answers, scores)]
+            scores_transformer_batch = [np.exp(s) if a == 6274 else 1-np.exp(s) for a,s in zip(answers, scores)]
 
             #scores_transformer_batch = [a[1] for a in scores_transformer_batch] # to tylko jak jest podwójny output w niektórych modelach!!!!
             try:

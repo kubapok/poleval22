@@ -28,7 +28,8 @@ DEVICE='cuda'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-xlm-roberta-large-2022-12-18_20-44-13'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-large-cased-2022-12-18_20-43-57-latest'
 #model_name1='unicamp-dl/mt5-base-mmarco-v2'
-model_name1='unicamp-dl/mt5-3B-mmarco-en-pt'
+#model_name1='unicamp-dl/mt5-3B-mmarco-en-pt'
+model_name1='unicamp-dl/mt5-13b-mmarco-100k-kdd-alltrain-4.5e'
 model1 = AutoModelForSeq2SeqLM.from_pretrained(model_name1)
 tokenizer_transformers1 = AutoTokenizer.from_pretrained(model_name1,use_fast=False)
 model1.to(DEVICE)
@@ -61,8 +62,8 @@ def get_reranked_scorest5(model, tokenizer_transformer, query_pl, text_pl):
             except:
                 import pdb; pdb.set_trace()
             scores = outputs[1].tolist()
-            import pdb; pdb.set_trace()
-            scores_transformer_batch = [np.exp(s) if a == 36339 else 1-np.exp(s) for a,s in zip(answers, scores)]
+            #import pdb; pdb.set_trace()
+            scores_transformer_batch = [np.exp(s) if a == 6274 else 1-np.exp(s) for a,s in zip(answers, scores)]
 
             #scores_transformer_batch = [a[1] for a in scores_transformer_batch] # to tylko jak jest podwójny output w niektórych modelach!!!!
             try:
