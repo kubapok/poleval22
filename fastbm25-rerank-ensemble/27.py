@@ -78,7 +78,7 @@ def run(df_passages, ranker, in_file, out_file, top_n):
     with open(out_file, 'wb') as f_out, open(in_file) as f_in:
         output_scores = []
         for line in tqdm(f_in):
-            dataset, query_pl, query_en = line.rstrip().split('\t')
+            dataset, query_pl = line.rstrip().split('\t')
             query_pl_tokenized = tokenizer_okapi.tokenize(query_pl)
             scores = ranker.top_k_sentence(query_pl_tokenized,NR_OF_INDICES)
             top10_indices_batch = df_passages.iloc[[a[1] for a in scores], ]['id'].tolist()
@@ -133,4 +133,14 @@ elif sys.argv[1] == '4':
         df_passages_allegro = pickle.load(f_out)
 
     run(df_passages_allegro, bm25_allegro,f'{CHALLENGEDIR}/test-A-allegro/in.tsv-en' , f'{CHALLENGEDIR}/test-A-allegro/out-{m_name_short}.pickle', NR_OF_INDICES)
+
+elif sys.argv[1] == '5':
+
+    with open(DATA_DIR + '/bm25_allegro.pkl','rb') as f_out:
+        bm25_allegro = pickle.load(f_out)
+
+    with open(DATA_DIR + '/df_passages_allegro.pkl','rb') as f_out:
+        df_passages_allegro = pickle.load(f_out)
+
+    run(df_passages_allegro, bm25_allegro,f'{CHALLENGEDIR}/test-B-allegro/in.tsv' , f'{CHALLENGEDIR}/test-B-allegro/out-{m_name_short}.pickle', NR_OF_INDICES)
 

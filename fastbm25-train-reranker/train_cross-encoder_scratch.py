@@ -54,6 +54,7 @@ model_name='cross-encoder/mmarco-mMiniLMv2-L12-H384-v1'
 #model_name='allegro/herbert-base-cased'
 #model_name='cross-encoder/mmarco-mdeberta-v3-base-5negs-v1'
 #model_name='google/mt5-large'
+model_name='/mnt/gpu_data1/kubapok/mMARCO/scripts/mminilm-pl-230103'
 train_batch_size = 64
 
 num_epochs = 10

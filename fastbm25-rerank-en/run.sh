@@ -2,7 +2,7 @@ PARAMS='stemmer=polimorf,word=1,word_lower=1,stemmed=1,stemmed_lower=1,STOPWORDS
 CHALLENGEDIR=$1
 #PARAMS=$1
 
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=3
 #bash 0.sh
 #python 1_save.py  $PARAMS
 python 2.py 1 $PARAMS  $CHALLENGEDIR 

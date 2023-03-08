@@ -27,9 +27,19 @@ DEVICE='cuda'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-large-cased-2022-12-18_11-08-41'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-xlm-roberta-large-2022-12-18_20-44-13'
 #model_name1='/mnt/gpu_data1/kubapok/crossencodertutorial/output/training_ms-marco_cross-encoder-allegro-herbert-large-cased-2022-12-18_20-43-57-latest'
-model_name1='unicamp-dl/mt5-base-mmarco-v2'
-model1 = AutoModelForSeq2SeqLM.from_pretrained(model_name1)
-tokenizer_transformers1 = AutoTokenizer.from_pretrained(model_name1,use_fast=False)
+#model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker-mt5/output/unicamp-dl-mt5-base-mmarco-v2-2023-01-13_17-10-53-epoch-1-loss-3.6989434632612634'
+#model_name1='unicamp-dl/mt5-base-mmarco-v2'
+model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker-mt5/output/unicamp-dl-mt5-base-mmarco-v2-2023-01-15_15-35-33-epoch-0-loss-2.478468271364202'
+model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker-mt5/output/unicamp-dl-mt5-base-mmarco-v2-2023-01-17_11-55-57-epoch-0-loss-2.680558152272911'
+model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker-mt5/output/unicamp-dl-mt5-base-mmarco-v2-2023-01-17_18-10-44-epoch-0-loss-0.17474711643393587'
+model_name1='/mnt/gpu_data1/kubapok/poleval2022/solutions/fastbm25-train-reranker-mt5/output/unicamp-dl-mt5-3B-mmarco-en-pt-2023-01-18_14-34-24-epoch-0-loss-0.2532012329226728'
+model_name1=sys.argv[4]
+import pickle
+with open(model_name1,'rb') as f:
+    model1=pickle.load(f)
+#model1 = AutoModelForSeq2SeqLM.from_pretrained(model_name1)
+#tokenizer_transformers1 = AutoTokenizer.from_pretrained('unicamp-dl/mt5-base-mmarco-v2',use_fast=False)
+tokenizer_transformers1 = AutoTokenizer.from_pretrained('unicamp-dl/mt5-3B-mmarco-en-pt',use_fast=False)
 model1.to(DEVICE)
 model1.eval()
 
@@ -43,28 +53,12 @@ tokenizer_okapi = Tokenizer(PARAMS)
 NR_OF_INDICES=500
 
 
-def get_reranked_scores(model, tokenizer_transformer, query_pl, text_pl):
-    bs=5
-    scores_transformer = list()
-    for i in range(0,len(text_pl), bs):
-        #features_transformer = tokenizer_transformer(query_en, text_en, padding=True, truncation=True, return_tensors='pt')
-        features_transformer = tokenizer_transformer(query_pl[i:i+bs], text_pl[i:i+bs], padding=True, truncation='only_second',max_length=512, return_tensors='pt').to(DEVICE) # do wywalenia
-        scores_transformer_batch = model(**features_transformer).logits
-        scores_transformer_batch = (-scores_transformer_batch).squeeze(1).tolist()
-        #scores_transformer_batch = [a[1] for a in scores_transformer_batch] # to tylko jak jest podwójny output w niektórych modelach!!!!
-        try:
-            scores_transformer += scores_transformer_batch[:]
-        except:
-            import pdb; pdb.set_trace()
-    return scores_transformer
-
-
 
 
 def get_reranked_scorest5(model, tokenizer_transformer, query_pl, text_pl):
     # https://github.com/vjeronymo2/pygaggle/blob/308f2e9f255c762fec0c22d5bd0e4e7f6bb4515b/pygaggle/run/finetune_monot5.py#L23
     with torch.no_grad():
-        bs=3
+        bs=24
         scores_transformer = list()
         inputs = [f'Query: {q} Document: {d} Relevant: ' for q, d in zip(query_pl, text_pl)]
         for i in range(0,len(inputs), bs):
@@ -72,12 +66,15 @@ def get_reranked_scorest5(model, tokenizer_transformer, query_pl, text_pl):
             
             inputs_batch = inputs[i:i+bs]
             features_transformer = tokenizer_transformer(inputs_batch, return_tensors='pt', truncation=True, max_length=512, padding=True).to(DEVICE)
-            outputs = model.generate(**features_transformer, return_dict_in_generate=True, output_scores=True, num_beams=10)
+            outputs = model.generate(**features_transformer, return_dict_in_generate=True, output_scores=True, num_beams=2,max_length=3)
             answers = outputs[0].squeeze()[:,1].tolist()
             scores = outputs[1].tolist()
-            scores_transformer_batch = [np.exp(s) if a == 36339 else 1-np.exp(s) for a,s in zip(answers, scores)]
 
-            #scores_transformer_batch = [a[1] for a in scores_transformer_batch] # to tylko jak jest podwójny output w niektórych modelach!!!!
+            #  dla base 36339
+            # dla 3B i innych 6274
+            scores_transformer_batch = [np.exp(s) if a == 3639   else 1-np.exp(s) for a,s in zip(answers, scores)] 
+            #import pdb; pdb.set_trace()
+            # trzeba sprawdzić outputs[0] czy robi sens]
             try:
                 scores_transformer += scores_transformer_batch[:]
             except:
