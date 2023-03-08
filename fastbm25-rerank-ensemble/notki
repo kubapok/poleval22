@@ -308,17 +308,6 @@ dev
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 -------------------------------------------
 
 36
@@ -344,3 +333,24 @@ test-A  73.53
 39
 ensemble- legal i allegro jak w 38, a wiki z 34
 test-A 0.7516350726159594
+
+
+
+
+--------------------------------------
+TEST B
+40
+/mnt/gpu_data1/kubapok/poleval2022/data/2022-passage-retrieval-ensemble
+tak jak w 38
+ensemble- legal i allegro jak w 38, a wiki z 34
+test-A 73.53
+
+
+
+
+41
+/mnt/gpu_data1/kubapok/poleval2022/data/2022-passage-retrieval-ensemble-only-dev
+allegro i legal jak w 40,
+a wiki nowe
+test-A 75.05
+dev-0 53.58 - 
