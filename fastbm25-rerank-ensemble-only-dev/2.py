@@ -78,7 +78,11 @@ def run(df_passages, ranker, in_file, out_file, top_n):
     with open(out_file, 'wb') as f_out, open(in_file) as f_in:
         output_scores = []
         for line in tqdm(f_in):
-            dataset, query_pl = line.rstrip().split('\t')
+            if 'dev-0' in in_file:
+                dataset, query_pl,x_ = line.rstrip().split('\t')
+            else:
+                dataset, query_pl = line.rstrip().split('\t')
+
             query_pl_tokenized = tokenizer_okapi.tokenize(query_pl)
             scores = ranker.top_k_sentence(query_pl_tokenized,NR_OF_INDICES)
             top10_indices_batch = df_passages.iloc[[a[1] for a in scores], ]['id'].tolist()

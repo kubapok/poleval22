@@ -29,7 +29,10 @@ def run(in_file, out_file, model1_ranks,model2_ranks,model3_ranks,model4_ranks, 
         for top10_indices_batch,m1,m2,m3,m4,m5,m6, m7  in zip(top10_indices,model1_ranks, model2_ranks, model3_ranks, model4_ranks, model5_ranks, model6_ranks, model7_ranks):
 
             #scores = [a1+a2+a3+a4+a5+a6  for a1,a2,a3,a4,a5,a6  in zip(m1,m2,m3,m4,m5,m6)]
-            scores = [a1+a3+a4+a5+a6  for a1,a2,a3,a4,a5,a6  in zip(m1,m2,m3,m4,m5,m6)]
+            #scores = [a2+a3+a4+a5+a6+a7  for a1,a2,a3,a4,a5,a6,a7  in zip(m1,m2,m3,m4,m5,m6,m7)] # to daje 55.24
+            #scores = [a3+a4+a5+a6+a7  for a1,a2,a3,a4,a5,a6,a7  in zip(m1,m2,m3,m4,m5,m6,m7)] # to daje 55.37
+            #scores = [a3+a5+a6+a7  for a1,a2,a3,a4,a5,a6,a7  in zip(m1,m2,m3,m4,m5,m6,m7)] # to daje  55.18
+            scores = [a4+a5+a6+a7  for a1,a2,a3,a4,a5,a6,a7  in zip(m1,m2,m3,m4,m5,m6,m7)] # to daje 55.42
             new_order = [top10_indices_batch[a] for a in np.argsort(scores)   ]
             new_order = [str(a) for a in new_order[:10]]
             f_out.write('\t'.join(new_order) + '\n')
@@ -87,8 +90,7 @@ elif sys.argv[1] == '3':
         model5_ranks = pickle.load(f_in)
     with open(f'{CHALLENGEDIR}/test-B-wiki/out-mt5-3B-mmarco-en-pt.pickle','rb') as f_in:
         model6_ranks = pickle.load(f_in)
-    #with open(f'{CHALLENGEDIR}/test-B-wiki/out-mt5-13b-mmarco-100k.pickle','rb') as f_in:
-    #    model7_ranks = pickle.load(f_in)
+    with open(f'{CHALLENGEDIR}/test-B-wiki/out-mt5-13b-mmarco-100k.pickle','rb') as f_in:
+        model7_ranks = pickle.load(f_in)
 
-    #run(f'{CHALLENGEDIR}/test-B-wiki/rerank-indices-{NR_OF_INDICES}.pickle' , f'{CHALLENGEDIR}/test-B-wiki/out.tsv', model1_ranks, model2_ranks, model3_ranks, model4_ranks, model5_ranks, model6_ranks, model7_ranks)
-    run(f'{CHALLENGEDIR}/test-B-wiki/rerank-indices-{NR_OF_INDICES}.pickle' , f'{CHALLENGEDIR}/test-B-wiki/out.tsv', model1_ranks, model2_ranks, model3_ranks, model4_ranks, model5_ranks, model6_ranks, model6_ranks)
+    run(f'{CHALLENGEDIR}/test-B-wiki/rerank-indices-{NR_OF_INDICES}.pickle' , f'{CHALLENGEDIR}/test-B-wiki/out.tsv', model1_ranks, model2_ranks, model3_ranks, model4_ranks, model5_ranks, model6_ranks, model7_ranks)
