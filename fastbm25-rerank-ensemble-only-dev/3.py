@@ -32,7 +32,9 @@ def run(in_file, out_file, model1_ranks,model2_ranks,model3_ranks,model4_ranks, 
             #scores = [a2+a3+a4+a5+a6+a7  for a1,a2,a3,a4,a5,a6,a7  in zip(m1,m2,m3,m4,m5,m6,m7)] # to daje 55.24
             #scores = [a3+a4+a5+a6+a7  for a1,a2,a3,a4,a5,a6,a7  in zip(m1,m2,m3,m4,m5,m6,m7)] # to daje 55.37
             #scores = [a3+a5+a6+a7  for a1,a2,a3,a4,a5,a6,a7  in zip(m1,m2,m3,m4,m5,m6,m7)] # to daje  55.18
-            scores = [a4+a5+a6+a7  for a1,a2,a3,a4,a5,a6,a7  in zip(m1,m2,m3,m4,m5,m6,m7)] # to daje 55.42
+            #scores = [a4+a5+a6+a7  for a1,a2,a3,a4,a5,a6,a7  in zip(m1,m2,m3,m4,m5,m6,m7)] # to daje 55.42
+            scores = [a4+a5+a7  for a1,a2,a3,a4,a5,a6,a7  in zip(m1,m2,m3,m4,m5,m6,m7)] # to daje 55.80
+            #import pdb; pdb.set_trace()
             new_order = [top10_indices_batch[a] for a in np.argsort(scores)   ]
             new_order = [str(a) for a in new_order[:10]]
             f_out.write('\t'.join(new_order) + '\n')
