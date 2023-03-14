@@ -25,12 +25,12 @@ NR_OF_INDICES=1500
 def run(in_file, out_file, models_dict):
     with open(out_file, 'w') as f_out, open(in_file,'rb') as f_in:
         top10_indices = pickle.load(f_in)
-        for i in top10_indices,models_dict['mt53B'],models_dict['mt513B']:
+        for i in top10_indices,models_dict['mt53B'],models_dict['mt513B'], models_dict['mmini']:
             print(len(i))
         output_scores = []
-        for top10_indices_batch,m1,m2 in zip(top10_indices,models_dict['mt53B'],models_dict['mt513B']   ):
+        for top10_indices_batch,m1,m2,m3 in zip(top10_indices,models_dict['mt53B'],models_dict['mt513B'], models_dict['mmini']   ):
 
-            scores = [a1+a2 for a1,a2 in zip(m1,m2)]
+            scores = [a1+a2+a3 for a1,a2,a3 in zip(m1,m2,m3)]
             #import pdb; pdb.set_trace()
             new_order = [top10_indices_batch[a] for a in np.argsort(scores)   ]
             new_order = [str(a) for a in new_order[:10]]
@@ -41,8 +41,8 @@ def load_models_dict(dataset_type):
     #    mt5_base = pickle.load(f_in)
     #with open(f'{CHALLENGEDIR}/{dataset_type}/out-e4639f2fcee3da997e7da0a0948229ac172f83b1.pickle','rb') as f_in:
     #    deberta = pickle.load(f_in)
-    #with open(f'{CHALLENGEDIR}/{dataset_type}/out-mmarco-mMiniLMv2-L12-H384-v1.pickle','rb') as f_in:
-    #    mmini = pickle.load(f_in)
+    with open(f'{CHALLENGEDIR}/{dataset_type}/out-mmarco-mMiniLMv2-L12-H384-v1.pickle','rb') as f_in:
+        mmini = pickle.load(f_in)
     with open(f'{CHALLENGEDIR}/{dataset_type}/out-mt5-3B-mmarco-en-pt.pickle','rb') as f_in:
         mt53B = pickle.load(f_in)
     with open(f'{CHALLENGEDIR}/{dataset_type}/out-mt5-13b-mmarco-100k.pickle','rb') as f_in:
@@ -53,7 +53,7 @@ def load_models_dict(dataset_type):
         #mt513B45e = pickle.load(f_in)
     d = {#'mt5_base':mt5_base,
             #'deberta':deberta,
-            #'mmini':mmini,
+            'mmini':mmini,
             'mt53B':mt53B,
             'mt513B':mt513B}
             #'mt513B4e':mt513B4e,
